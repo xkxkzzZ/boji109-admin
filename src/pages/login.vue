@@ -8,7 +8,7 @@
             <book-open class="w-8 h-8 text-emerald-600" />
           </div>
         </div>
-        <h1 class="text-2xl font-medium text-gray-800">博记天下数据管理系统</h1>
+        <h1 class="text-2xl font-medium text-gray-800">古籍数据管理系统</h1>
         <p class="text-gray-500 mt-2">请登录以访问管理后台</p>
       </div>
 
@@ -77,12 +77,12 @@
         </form>
 
         <!-- Decorative Element -->
-        <!-- <div class="mt-8 pt-6 border-t border-gray-100">
+        <div class="mt-8 pt-6 border-t border-gray-100">
           <div class="flex items-center justify-center space-x-2 text-gray-500 text-xs">
             <scroll class="w-4 h-4" />
             <span>传承千年文化，守护古籍智慧</span>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>

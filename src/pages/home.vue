@@ -10,7 +10,7 @@
                 <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-2">
                   <book-open class="w-4 h-4 text-emerald-600" />
                 </div>
-                <span class="text-lg font-medium text-gray-800">博记天下数据管理系统</span>
+                <span class="text-lg font-medium text-gray-800">古籍数据管理系统</span>
               </div>
             </div>
             
