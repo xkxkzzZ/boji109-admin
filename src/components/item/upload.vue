@@ -305,9 +305,8 @@ const handleSubmit = async () => {
     // Simulate API call
     // await new Promise(resolve => setTimeout(resolve, 1500))
 
-    const res = uploadItem(formatFormData(formData), authStore.token)
-    console.log('res:', res)
-    if (res.status === 200) {
+    const response = await uploadItem(formatFormData(formData), authStore.token)
+    if (response.status === 200) {
       alert('数据上传成功！')
     } else {
       alert('上传失败，请重试1')

@@ -70,13 +70,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineEmits } from 'vue'
 import { BookOpen, User, Lock, LoaderCircle } from 'lucide-vue-next'
-// import { superlogin } from '@/api/auth'
 import { useAuthStore } from '@/store/superuser'
-// emit
-import { defineEmits } from 'vue'
-defineEmits(['gotohome'])
+const emit = defineEmits(['gotohome'])
 
 const authStore = useAuthStore()
 // Form data

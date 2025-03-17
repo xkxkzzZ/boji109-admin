@@ -53,10 +53,10 @@
                     <button @click="handlelogout" v-else
                         class="text-gray-500 border-transparent hover:border-emerald-500 hover:text-gray-700 cursor-pointer inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">登出</button>
                 </div>
-                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <!-- <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
                     <button @click="authStore.debuglogin"
                         class="text-gray-500 border-transparent hover:border-emerald-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">debuglogin</button>
-                </div>
+                </div> -->
 
             </div>
         </div>
