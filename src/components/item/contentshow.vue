@@ -1,53 +1,6 @@
 <template>
   <div class="min-h-screen bg-emerald-50/50">
-    <!-- Header (reused from HomePage) -->
-    <header class="bg-white border-b border-gray-100 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <!-- Logo and Site Name -->
-          <div class="flex items-center">
-            <div class="flex-shrink-0 flex items-center">
-              <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-2">
-                <book-open class="w-4 h-4 text-emerald-600" />
-              </div>
-              <span class="text-lg font-medium text-gray-800">古籍数据管理系统</span>
-            </div>
-          </div>
-
-          <!-- User Dropdown -->
-          <div class="flex items-center">
-            <div class="relative">
-              <button @click="userMenuOpen = !userMenuOpen"
-                class="flex items-center text-sm px-3 py-1.5 rounded-lg hover:bg-gray-50">
-                <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-2">
-                  <user class="w-4 h-4 text-emerald-600" />
-                </div>
-                <span class="text-gray-700">张文翰</span>
-                <chevron-down class="ml-1 w-4 h-4 text-gray-500" />
-              </button>
-
-              <!-- User Menu Dropdown -->
-              <div v-if="userMenuOpen"
-                class="absolute right-0 mt-2 py-1 w-48 bg-white rounded-md shadow-lg border border-gray-100 z-10">
-                <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                  <user class="mr-2 w-4 h-4 text-gray-500" />
-                  <span>个人信息</span>
-                </a>
-                <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                  <settings class="mr-2 w-4 h-4 text-gray-500" />
-                  <span>设置</span>
-                </a>
-                <div class="border-t border-gray-100 my-1"></div>
-                <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
-                  <log-out class="mr-2 w-4 h-4 text-red-500" />
-                  <span>退出登录</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
+    
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -57,7 +10,8 @@
           <h1 class="text-2xl font-medium text-gray-800">古籍条目管理</h1>
           <p class="text-gray-500 mt-1">管理、编辑和上传古籍条目信息</p>
         </div>
-        <button @click="openEntryModal(null)"
+        <!--  @click="openEntryModal(null)"-->
+        <button @click="emit('startupload')"
           class="flex items-center py-2 px-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
           <plus class="w-4 h-4 mr-1" />
           <span>新增条目</span>
@@ -160,18 +114,6 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="book in filteredBooks" :key="book.id" class="hover:bg-gray-50">
-                <!-- <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div class="h-10 w-10 flex-shrink-0 bg-emerald-100 rounded flex items-center justify-center">
-                      <book class="h-5 w-5 text-emerald-600" v-if="!book.coverImage" />
-                      <img v-else :src="book.coverImage" alt="" class="h-10 w-10 rounded object-cover" />
-                    </div>
-                    <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">{{ book.title }}</div>
-                      <div class="text-sm text-gray-500">{{ book.year }}</div>
-                    </div>
-                  </div>
-                </td> -->
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ book.custom_id }}</div>
                 </td>
@@ -312,23 +254,6 @@
                   </div>
                   <!-- Dynasty and Year -->
                   <div class="grid grid-cols-2 gap-4">
-                    <!-- <div>
-                      <label for="dynasty" class="block text-sm font-medium text-gray-700">朝代</label>
-                      <select 
-                        id="dynasty" 
-                        v-model="editingBook.dynasty" 
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                      >
-                        <option value="先秦">先秦</option>
-                        <option value="汉">汉代</option>
-                        <option value="魏晋">魏晋</option>
-                        <option value="唐">唐代</option>
-                        <option value="宋">宋代</option>
-                        <option value="元">元代</option>
-                        <option value="明">明代</option>
-                        <option value="清">清代</option>
-                      </select>
-                    </div> -->
                     <div>
                       <label for="year" class="block text-sm font-medium text-gray-700">年份</label>
                       <input type="text" id="year" v-model="editingBook.year"
@@ -348,35 +273,6 @@
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
                   </div>
 
-
-
-                  <!-- Description -->
-                  <!-- <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700">描述</label>
-                    <textarea 
-                      id="description" 
-                      v-model="editingBook.description" 
-                      rows="3" 
-                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                    ></textarea>
-                  </div> -->
-
-                  <!-- Cover Image Upload -->
-                  <!-- <div>
-                    <label class="block text-sm font-medium text-gray-700">封面图片</label>
-                    <div class="mt-1 flex items-center">
-                      <div class="h-16 w-16 flex-shrink-0 bg-emerald-100 rounded flex items-center justify-center">
-                        <book class="h-8 w-8 text-emerald-600" v-if="!editingBook.coverImage" />
-                        <img v-else :src="editingBook.coverImage" alt="" class="h-16 w-16 rounded object-cover" />
-                      </div>
-                      <button 
-                        type="button" 
-                        class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
-                      >
-                        上传图片
-                      </button>
-                    </div>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -461,10 +357,9 @@ import {
 } from 'lucide-vue-next'
 
 import { getItemByIds, updateItem } from '@/api/item'
-import { ca } from 'element-plus/es/locales.mjs'
-
 import { useAuthStore } from '@/store/superuser'
 const authStore = useAuthStore()
+const emit = defineEmits(['startupload'])
 
 onMounted(() => {
   fetchBooks([2, 3, 7, 8, 9, 10])

@@ -2,9 +2,20 @@
   <div class="min-h-screen bg-gradient-to-r from-green-50 to-blue-50 py-8 px-4">
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md">
       <!-- Header -->
-      <div class="border-b border-gray-200 px-6 py-4">
-        <h1 class="text-xl font-bold text-gray-800">上传古籍数据</h1>
-        <p class="text-sm text-gray-500 mt-1">请填写以下信息完成古籍数据上传</p>
+      <div class="border-b border-gray-200 px-6 py-4 flex justify-between">
+        <div >
+          <h1 class="text-xl font-bold text-gray-800">上传古籍数据</h1>
+          <p class="text-sm text-gray-500 mt-1">请填写以下信息完成古籍数据上传</p>
+        </div>
+        <div>
+          <button @click="emit('finishupload')"
+            class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+            返回目录
+          </button>
+
+
+        </div>
+        
       </div>
 
       <!-- Form -->
@@ -179,6 +190,7 @@ import { ref, reactive } from 'vue'
 import { uploadItem } from '@/api/item'
 import { useAuthStore } from '@/store/superuser';
 const authStore = useAuthStore();
+const emit = defineEmits(['finishupload'])
 
 // Form data
 const formData = reactive({
@@ -287,23 +299,7 @@ const handleSubmit = async () => {
   try {
     isSubmitting.value = true
 
-    // Here you would implement your actual submission logic
-    // For example:
-    // const formDataToSend = new FormData()
-    // Object.keys(formData).forEach(key => {
-    //   if (key === 'keywords') {
-    //     formDataToSend.append(key, JSON.stringify(formData[key]))
-    //   } else {
-    //     formDataToSend.append(key, formData[key])
-    //   }
-    // })
-    // await api.post('/ancient-books', formDataToSend)
-
-    // console.log('Submitting data:', formData)
     console.log('formatted data:', formatFormData(formData))
-
-    // Simulate API call
-    // await new Promise(resolve => setTimeout(resolve, 1500))
 
     const response = await uploadItem(formatFormData(formData), authStore.token)
     if (response.status === 200) {
@@ -311,10 +307,6 @@ const handleSubmit = async () => {
     } else {
       alert('上传失败，请重试1')
     }
-    // Show success message
-    // alert('数据上传成功！')
-
-    // Reset form after successful submission
     resetForm()
 
   } catch (error) {
@@ -335,6 +327,8 @@ const formatFormData = (formData) => {
   newFormData.append('file', formData.file)
   newFormData.append('year', formData.year)
   newFormData.append("keywords", JSON.stringify(formData.keywords));
+  // 把关键词数组转换为字符串 ["key1", "key2", "key3"] => "key1,key2,key3"
+  // newFormData.append('keywords', formData.keywords.join(','))
   return newFormData
 }
 

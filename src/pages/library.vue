@@ -1,22 +1,6 @@
 <template>
     <div class="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 pb-10">
-      <!-- Header -->
-      <header class="bg-white shadow-sm border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between h-16">
-            <div class="flex items-center">
-              <book-open class="h-8 w-8 text-emerald-600" />
-              <h1 class="ml-3 text-xl font-medium text-gray-800">古籍数据管理系统</h1>
-            </div>
-            <div class="flex items-center">
-              <span class="text-sm text-gray-500 mr-4">管理员</span>
-              <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
-                <user class="w-4 h-4 text-emerald-600" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      
   
       <!-- Main Content -->
       <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">

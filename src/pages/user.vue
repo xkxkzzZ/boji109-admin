@@ -1,51 +1,6 @@
 <template>
     <div class="min-h-screen bg-emerald-50/50">
-      <!-- Header (reused from previous pages) -->
-      <header class="bg-white border-b border-gray-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between h-16">
-            <!-- Logo and Site Name -->
-            <div class="flex items-center">
-              <div class="flex-shrink-0 flex items-center">
-                <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-2">
-                  <book-open class="w-4 h-4 text-emerald-600" />
-                </div>
-                <span class="text-lg font-medium text-gray-800">古籍数据管理系统</span>
-              </div>
-            </div>
-            
-            <!-- User Dropdown -->
-            <div class="flex items-center">
-              <div class="relative">
-                <button @click="userMenuOpen = !userMenuOpen" class="flex items-center text-sm px-3 py-1.5 rounded-lg hover:bg-gray-50">
-                  <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-2">
-                    <user class="w-4 h-4 text-emerald-600" />
-                  </div>
-                  <span class="text-gray-700">张文翰</span>
-                  <chevron-down class="ml-1 w-4 h-4 text-gray-500" />
-                </button>
-                
-                <!-- User Menu Dropdown -->
-                <div v-if="userMenuOpen" class="absolute right-0 mt-2 py-1 w-48 bg-white rounded-md shadow-lg border border-gray-100 z-10">
-                  <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                    <user class="mr-2 w-4 h-4 text-gray-500" />
-                    <span>个人信息</span>
-                  </a>
-                  <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                    <settings class="mr-2 w-4 h-4 text-gray-500" />
-                    <span>设置</span>
-                  </a>
-                  <div class="border-t border-gray-100 my-1"></div>
-                  <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
-                    <log-out class="mr-2 w-4 h-4 text-red-500" />
-                    <span>退出登录</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      
   
       <!-- Main Content -->
       <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
