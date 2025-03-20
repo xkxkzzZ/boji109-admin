@@ -80,3 +80,20 @@ export const getQueryList = async (query) => {
     return error.response;
   }
 }
+
+// 删除条目
+export const deleteItem = async (id, token) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/item/delete/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    console.log(response);
+    return response;
+  }
+  catch (error) {
+    console.log(error.response);
+    return error.response;
+  }
+}

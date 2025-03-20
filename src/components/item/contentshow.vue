@@ -304,7 +304,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Search, RefreshCw, Edit, Eye, Trash2, Plus, AlertTriangle } from 'lucide-vue-next'
-import { getItemByIds, updateItem, getFilteredList, getQueryList } from '@/api/item'
+import { getItemByIds, updateItem, getFilteredList, getQueryList, deleteItem } from '@/api/item'
 import { useAuthStore } from '@/store/superuser'
 const authStore = useAuthStore()
 const emit = defineEmits(['startupload'])
@@ -492,11 +492,17 @@ const confirmDelete = (book) => {
   showDeleteModal.value = true
 }
 
-const deleteEntry = () => {
+const deleteEntry = async () => {
   if (bookToDelete.value) {
-    books.value = books.value.filter(b => b.id !== bookToDelete.value.id)
+    const response = await deleteItem(bookToDelete.value.id, authStore.token)
+    if (response.status === 200) {
+      console.log('Book deleted successfully:', response)
+    } else {
+      console.error('Error deleting book:', response)
+    }
   }
   showDeleteModal.value = false
+  fetchData()
 }
 
 // View details function
