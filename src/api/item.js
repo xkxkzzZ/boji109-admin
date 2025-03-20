@@ -56,7 +56,22 @@ export const getFilteredList = async (filter) => {
   try {
     console.log(filter);
     const response = await axios.get(`${API_BASE_URL}/item/filter`,{
-      params: filter // 这里直接传入 filter 对象
+      params: filter 
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error.response);
+    return error.response;
+  }
+}
+
+// 搜索列表
+export const getQueryList = async (query) => {
+  try {
+    console.log(query);
+    const response = await axios.get(`${API_BASE_URL}/item/search`, {
+      params: query
     });
     console.log(response);
     return response;

@@ -124,8 +124,8 @@
 
           <!-- 简介 Brief Introduction -->
           <div class="col-span-2">
-            <label for="intro" class="block text-sm font-medium text-gray-700 mb-1">简介</label>
-            <textarea id="intro" v-model="formData.intro" rows="4"
+            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">简介</label>
+            <textarea id="description" v-model="formData.description" rows="4"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               placeholder="请输入古籍简介"></textarea>
           </div>
@@ -216,7 +216,7 @@ const formData = reactive({
   category3: '',
   custom_id: '',
   keywords: [],
-  intro: '',
+  description: '',
   shape: '',
   file: null,
   coverImage: null,
@@ -229,26 +229,44 @@ const isSubmitting = ref(false)
 const tagInput = ref('')
 const coverPreview = ref(null)
 
-// Mock data for categories and subcategories
 const categories = [
   { id: 'sanye', name: '散叶' },
   { id: 'guihu', name: '归户' },
-  { id: 'lingce', name: '另册' },
-]
+  { id: 'lingce', name: '另册' }
+];
 
 const subcategoriesMap = {
-  散叶: [
+  '散叶': [
     { id: 'qiyue', name: '契约' },
     { id: 'hetong', name: '合同' },
-    { id: 'piaozheng', name: '票证' }
+    { id: 'piaozheng', name: '票证' },
+    { id: 'zhengming', name: '证明' },
+    { id: 'jiumudan', name: '节目单' },
+    { id: 'handu', name: '函牍' },
+    { id: 'tongzhi', name: '通知' },
+    { id: 'qita', name: '其他' }
   ],
-  归户: [
+  '归户': [
     { id: 'hunhe', name: '混合类' },
+    { id: 'shangye', name: '商业类' },
+    { id: 'gongye', name: '工业类' },
+    { id: 'jinrong', name: '金融类' },
+    { id: 'zufu', name: '租赋类' },
+    { id: 'gongjia', name: '工价类' },
+    { id: 'hunshang', name: '婚丧类' }
   ],
-  另册: [
-    { id: 'hunhe', name: '混合' },
-  ],
-}
+  '另册': [
+    { id: 'hunhe', name: '混合类' },
+    { id: 'shangye', name: '商业类' },
+    { id: 'gongye', name: '工业类' },
+    { id: 'jinrong', name: '金融类' },
+    { id: 'zufu', name: '租赋类' },
+    { id: 'gongjia', name: '工价类' },
+    { id: 'hunshang', name: '婚丧类' },
+    { id: 'qita', name: '其他' }
+  ]
+};
+
 
 const subcategories = ref([])
 
@@ -326,17 +344,17 @@ const handleSubmit = async () => {
 
 const formatFormData = (formData) => {
   const newFormData = new FormData()
+  newFormData.append('file', formData.file)
   newFormData.append('title', formData.title)
+  newFormData.append('custom_id', formData.custom_id)
   newFormData.append('category1', formData.category1)
   newFormData.append('category2', formData.category2)
-  newFormData.append('custom_id', formData.custom_id)
-  newFormData.append('price', formData.price)
-  newFormData.append('file', formData.file)
-  newFormData.append('year', formData.year)
-  newFormData.append('keywords', formData.keywords.join('，'))
-  newFormData.append('description', formData.intro)
-  newFormData.append('shape', formData.shape)
   newFormData.append('category3', formData.category3)
+  newFormData.append('price', formData.price)
+  newFormData.append('year', formData.year)
+  newFormData.append('keywords', formData.keywords.join(', '))
+  newFormData.append('description', formData.description)
+  newFormData.append('shape', formData.shape)
   return newFormData
 }
 
