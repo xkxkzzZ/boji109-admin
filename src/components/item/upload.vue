@@ -20,35 +20,13 @@
 
       <!-- Form -->
       <form @submit.prevent="handleSubmit" class="p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- 标题 Title -->
           <div class="col-span-2">
             <label for="title" class="block text-sm font-medium text-gray-700 mb-1">标题</label>
             <input id="title" v-model="formData.title" type="text" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               placeholder="请输入古籍标题" />
-          </div>
-
-          <!-- 分类 Category1 -->
-          <div>
-            <label for="category1" class="block text-sm font-medium text-gray-700 mb-1">分类</label>
-            <select id="category1" v-model="formData.category1" required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              @change="loadSubcategories">
-              <option value="" disabled selected>请选择分类</option>
-              <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-            </select>
-          </div>
-
-          <!-- 子分类 category2 -->
-          <div>
-            <label for="category2" class="block text-sm font-medium text-gray-700 mb-1">子分类</label>
-            <select id="category2" v-model="formData.category2" required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              :disabled="!formData.category1">
-              <option value="" disabled selected>请选择子分类</option>
-              <option v-for="subcat in subcategories" :key="subcat.id" :value="subcat.id">{{ subcat.name }}</option>
-            </select>
           </div>
 
           <!-- 数据编号 Data ID -->
@@ -59,21 +37,41 @@
               placeholder="请输入数据编号" />
           </div>
 
-          <!-- 定价 Price -->
+
+          <!-- 分类 Category1 -->
           <div>
-            <label for="price" class="block text-sm font-medium text-gray-700 mb-1">定价</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span class="text-gray-500 sm:text-sm">¥</span>
-              </div>
-              <input id="price" v-model="formData.price" type="number" step="0.01" min="0" required
-                class="w-full pl-7 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                placeholder="0.00" />
-            </div>
+            <label for="category1" class="block text-sm font-medium text-gray-700 mb-1">一级分类</label>
+            <select id="category1" v-model="formData.category1" required
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              @change="loadSubcategories">
+              <!-- <option value="" disabled selected>请选择一级分类</option> -->
+              <option v-for="cat in categories" :key="cat.id" :value="cat.name">{{ cat.name }}</option>
+            </select>
+          </div>
+
+          <!-- 子分类 category2 -->
+          <div>
+            <label for="category2" class="block text-sm font-medium text-gray-700 mb-1">二级分类</label>
+            <select id="category2" v-model="formData.category2" required
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              :disabled="!formData.category1">
+              <!-- <option value="" disabled selected>请选择二级分类</option> -->
+              <option v-for="subcat in subcategories" :key="subcat.id" :value="subcat.name">{{ subcat.name }}</option>
+            </select>
+          </div>
+
+
+
+          <!-- 子分类 category3 -->
+          <div>
+            <label for="category3" class="block text-sm font-medium text-gray-700 mb-1">三级分类</label>
+            <input id="category3" v-model="formData.category3" type="text" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              placeholder="请输入三级分类（可选）" />
           </div>
 
           <!-- 关键词 keywords -->
-          <div class="col-span-2">
+          <div class="col-span-1">
             <label for="keywords" class="block text-sm font-medium text-gray-700 mb-1">关键词</label>
             <div
               class="flex flex-wrap items-center gap-2 p-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-transparent">
@@ -90,6 +88,7 @@
             </div>
           </div>
 
+
           <!-- 年份时间 Year/Time -->
           <div>
             <label for="year" class="block text-sm font-medium text-gray-700 mb-1">年份时间</label>
@@ -97,13 +96,30 @@
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               placeholder="请输入古籍年份时间" />
           </div>
-
-          <!-- 形态 Form/Shape -->
+          
+          <!-- 定价 Price -->
           <div>
-            <label for="form" class="block text-sm font-medium text-gray-700 mb-1">形态</label>
-            <input id="form" v-model="formData.form" type="text"
+            <label for="price" class="block text-sm font-medium text-gray-700 mb-1">定价</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm">¥</span>
+              </div>
+              <input id="price" v-model="formData.price" type="number" step="0.01" min="0" required
+                class="w-full pl-7 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                placeholder="0.00" />
+            </div>
+          </div>
+
+          
+
+          
+
+          <!-- 形态 Shape -->
+          <div class="col-span-2">
+            <label for="shape" class="block text-sm font-medium text-gray-700 mb-1">形态</label>
+              <textarea id="shape" v-model="formData.shape" rows="2"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请描述古籍形态特征" />
+              placeholder="请描述古籍形态特征"></textarea>
           </div>
 
           <!-- 简介 Brief Introduction -->
@@ -115,7 +131,7 @@
           </div>
 
           <!-- 封面图片 Cover Image -->
-          <div>
+          <!-- <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">封面图片</label>
             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
               <div class="space-y-1 text-center">
@@ -133,7 +149,7 @@
                 <p class="text-xs text-gray-500">PNG, JPG, GIF 最大 10MB</p>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- 完整文件 Complete File -->
           <div>
@@ -197,10 +213,11 @@ const formData = reactive({
   title: '',
   category1: '',
   category2: '',
+  category3: '',
   custom_id: '',
   keywords: [],
   intro: '',
-  form: '',
+  shape: '',
   file: null,
   coverImage: null,
   price: '',
@@ -214,33 +231,23 @@ const coverPreview = ref(null)
 
 // Mock data for categories and subcategories
 const categories = [
-  { id: 'classics', name: '经部' },
-  { id: 'history', name: '史部' },
-  { id: 'philosophy', name: '子部' },
-  { id: 'literature', name: '集部' }
+  { id: 'sanye', name: '散叶' },
+  { id: 'guihu', name: '归户' },
+  { id: 'lingce', name: '另册' },
 ]
 
 const subcategoriesMap = {
-  classics: [
-    { id: 'yijing', name: '易经' },
-    { id: 'shujing', name: '书经' },
-    { id: 'shijing', name: '诗经' }
+  散叶: [
+    { id: 'qiyue', name: '契约' },
+    { id: 'hetong', name: '合同' },
+    { id: 'piaozheng', name: '票证' }
   ],
-  history: [
-    { id: 'official', name: '正史' },
-    { id: 'chronology', name: '编年' },
-    { id: 'geography', name: '地理' }
+  归户: [
+    { id: 'hunhe', name: '混合类' },
   ],
-  philosophy: [
-    { id: 'confucian', name: '儒家' },
-    { id: 'daoist', name: '道家' },
-    { id: 'buddhist', name: '佛家' }
+  另册: [
+    { id: 'hunhe', name: '混合' },
   ],
-  literature: [
-    { id: 'poetry', name: '诗歌' },
-    { id: 'prose', name: '散文' },
-    { id: 'novel', name: '小说' }
-  ]
 }
 
 const subcategories = ref([])
@@ -326,9 +333,10 @@ const formatFormData = (formData) => {
   newFormData.append('price', formData.price)
   newFormData.append('file', formData.file)
   newFormData.append('year', formData.year)
-  newFormData.append("keywords", JSON.stringify(formData.keywords));
-  // 把关键词数组转换为字符串 ["key1", "key2", "key3"] => "key1,key2,key3"
-  // newFormData.append('keywords', formData.keywords.join(','))
+  newFormData.append('keywords', formData.keywords.join('，'))
+  newFormData.append('description', formData.intro)
+  newFormData.append('shape', formData.shape)
+  newFormData.append('category3', formData.category3)
   return newFormData
 }
 

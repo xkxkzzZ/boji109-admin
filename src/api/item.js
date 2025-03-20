@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_BASE_URL = "http://192.168.2.106:8000";
+import { API_BASE_URL } from "./config";
 
 // 上传
 export const uploadItem = async (form, token) => {
@@ -46,6 +46,21 @@ export const updateItem = async (id, data, token) => {
     return response;
   }
   catch (error) {
+    console.log(error.response);
+    return error.response;
+  }
+}
+
+// 获得筛选后的列表
+export const getFilteredList = async (filter) => {
+  try {
+    console.log(filter);
+    const response = await axios.get(`${API_BASE_URL}/item/filter`,{
+      params: filter // 这里直接传入 filter 对象
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
     console.log(error.response);
     return error.response;
   }

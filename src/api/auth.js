@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_BASE_URL = "http://192.168.2.106:8000";
+import { API_BASE_URL } from "./config";
 
 
 export const superlogin = async (form) => {

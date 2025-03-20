@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-emerald-50/50">
-    
+
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -36,32 +36,22 @@
 
           <!-- Dynasty Filter -->
           <div>
-            <label for="dynasty" class="block text-sm font-medium text-gray-700 mb-1">朝代</label>
-            <select id="dynasty" v-model="filters.dynasty"
+            <label for="cat1" class="block text-sm font-medium text-gray-700 mb-1">一级分类</label>
+            <select id="cat1" v-model="filters.cat1"
               class="block w-full pl-3 pr-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50">
-              <option value="">全部朝代</option>
-              <option value="先秦">先秦</option>
-              <option value="汉">汉代</option>
-              <option value="魏晋">魏晋</option>
-              <option value="唐">唐代</option>
-              <option value="宋">宋代</option>
-              <option value="元">元代</option>
-              <option value="明">明代</option>
-              <option value="清">清代</option>
+              <!-- <option value="">全部类别</option> -->
+              <option v-for="cat in categories" :key="cat.id" :value="cat.name">{{ cat.name }}</option>
             </select>
           </div>
 
           <!-- Category Filter -->
           <div>
-            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">类别</label>
-            <select id="category" v-model="filters.category"
-              class="block w-full pl-3 pr-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50">
+            <label for="cat2" class="block text-sm font-medium text-gray-700 mb-1">二级分类</label>
+            <select id="cat2" v-model="filters.cat2"
+              class="block w-full pl-3 pr-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+              :disabled="!filters.cat1">
               <option value="">全部类别</option>
-              <option value="经部">经部</option>
-              <option value="史部">史部</option>
-              <option value="子部">子部</option>
-              <option value="集部">集部</option>
-              <option value="丛部">丛部</option>
+              <option v-for="subcat in getsubcategories(filters.cat1)" :key="subcat.id" :value="subcat.name">{{ subcat.name }}</option>
             </select>
           </div>
         </div>
@@ -74,7 +64,7 @@
 
           <button @click="applyFilters"
             class="flex items-center py-1.5 px-3 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
-            <filter class="w-4 h-4 mr-1" />
+            <!-- <filter class="w-4 h-4 mr-1" /> -->
             <span>应用筛选</span>
           </button>
         </div>
@@ -93,10 +83,13 @@
                   名称
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  类别1
+                  一级分类
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  类别2
+                  二级分类
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  三级分类
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   关键词
@@ -127,6 +120,9 @@
                   <div class="text-sm text-gray-900">{{ book.category2 }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ book.category3 }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ book.keywords }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -135,7 +131,7 @@
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ book.price }}</div>
                 </td>
-                
+
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <div class="flex space-x-2">
                     <button @click="openEntryModal(book)" class="text-emerald-600 hover:text-emerald-900">
@@ -231,24 +227,20 @@
                   <!-- Category and Status -->
                   <div class="grid grid-cols-2 gap-4">
                     <div>
-                      <label for="category1" class="block text-sm font-medium text-gray-700">二级分类</label>
+                      <label for="category1" class="block text-sm font-medium text-gray-700">一级分类</label>
                       <select id="category1" v-model="editingBook.category1"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm">
-                        <option value="经部">经部</option>
-                        <option value="史部">史部</option>
-                        <option value="子部">子部</option>
-                        <option value="集部">集部</option>
-                        <option value="丛部">丛部</option>
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+                        >
+                        <option v-for="cat in categories" :key="cat.id" :value="cat.name">{{ cat.name }}</option>
                       </select>
                     </div>
                     <div>
-                      <label for="category2" class="block text-sm font-medium text-gray-700">三级分类</label>
+                      <label for="category2" class="block text-sm font-medium text-gray-700">二级分类</label>
                       <select id="category2" v-model="editingBook.category2"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm">
-                        <option value="已数字化">已数字化</option>
-                        <option value="编目中">编目中</option>
-                        <option value="待校对">待校对</option>
-                        <option value="未处理">未处理</option>
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+                        :disabled="!editingBook.category1">
+                        <option v-for="subcat in getsubcategories(editingBook.category1)" :key="subcat.id" :value="subcat.name">{{ subcat.name }}
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -337,7 +329,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watchEffect  } from 'vue'
 import {
   BookOpen,
   User,
@@ -356,23 +348,24 @@ import {
   AlertTriangle
 } from 'lucide-vue-next'
 
-import { getItemByIds, updateItem } from '@/api/item'
+import { getItemByIds, updateItem, getFilteredList } from '@/api/item'
 import { useAuthStore } from '@/store/superuser'
 const authStore = useAuthStore()
 const emit = defineEmits(['startupload'])
 
-onMounted(() => {
-  fetchBooks([2, 3, 7, 8, 9, 10])
+onMounted(async () => {
+  // fetchBooks([1, 2, 3, 4, 5])
+  const list = await filtedlist("散叶","全部类别")
+  console.log(list)
+  books.value = await fetchBooks(list)
+  console.log(books.value)
 })
-
-// User menu state
-const userMenuOpen = ref(false)
 
 // Search and filter state
 const searchQuery = ref('')
 const filters = ref({
-  dynasty: '',
-  category: ''
+  cat1: '',
+  cat2: '',
 })
 
 // Modal states
@@ -381,83 +374,113 @@ const showDeleteModal = ref(false)
 const currentBook = ref(null)
 const bookToDelete = ref(null)
 const editingBook = ref({
-  id:0,
+  id: 0,
   custom_id: '',
   title: '',
-  // author: '',
-  // dynasty: '明',
-
-  // category: '史部',
-  // status: '未处理',
-  // description: '',
-  // coverImage: ''
   category1: '',
   category2: '',
+  category3: '',
   year: '',
   price: '',
   keywords: '',
-
+  description: '',
+  shape: '',
 })
 
 const books = ref([])
+
+
+const categories = [
+  { id: 'sanye', name: '散叶' },
+  { id: 'guihu', name: '归户' },
+  { id: 'lingce', name: '另册' },
+]
+const subcategoriesMap = {
+  散叶: [
+    { id: 'qiyue', name: '契约' },
+    { id: 'hetong', name: '合同' },
+    { id: 'piaozheng', name: '票证' }
+  ],
+  归户: [
+    { id: 'hunhe', name: '混合类' },
+  ],
+  另册: [
+    { id: 'hunhe', name: '混合' },
+  ],
+}
+const getsubcategories = (cat1) => {
+  return subcategoriesMap[cat1] || []
+}
 
 // Fetch books from API
 const fetchBooks = async (ids) => {
   try {
     const response = await getItemByIds(ids)
-    books.value = response.data
+    // books.value = response.data
+    return response.data
   } catch (error) {
     console.error('Error fetching books:', error)
   }
 }
 
-// Sample book data
-// const books = ref([
-//   {
-//     id: 1,
-//     title: '资治通鉴',
-//     author: '司马光',
-//     dynasty: '宋',
-//     year: '1084年',
-//     category: '史部',
-//     status: '已数字化',
-//     description: '《资治通鉴》是由北宋司马光主编的一部多卷本编年体史书，记载了从战国末期（前403年）到五代末期（959年）共1362年的历史。',
-//     coverImage: ''
-//   }
-// ])
+const filtedlist = async (cat1, cat2) => {
+  try {
+    cat1 = cat1 === '全部类别' ? null : cat1
+    cat2 = cat2 === '全部类别' ? null : cat2
+    const response = await getFilteredList({category1: cat1, category2: cat2})
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('Error fetching books:', error)
+  }
+}
 
 
+watchEffect(async () => {
+  const list = await filtedlist(filters.value.cat1, filters.value.cat2);
+  books.value = await fetchBooks(list);
+});
 
 // Computed filtered books based on search and filters
 const filteredBooks = computed(() => {
-  return books.value.filter(book => {
-    // Search filter
-    if (searchQuery.value && !book.title.includes(searchQuery.value) &&
-      !book.author.includes(searchQuery.value) &&
-      !book.description.includes(searchQuery.value)) {
-      return false
-    }
+  return books.value
 
-    // Dynasty filter
-    if (filters.value.dynasty && book.dynasty !== filters.value.dynasty) {
-      return false
-    }
+  // const list = await filtedlist("filters.value.cat1","filters.value.cat2")
+  // console.log(list)
+  // books.value = await fetchBooks(list)
+  // console.log(books.value)
+  // return books.value
+  
 
-    // Category filter
-    if (filters.value.category && book.category !== filters.value.category) {
-      return false
-    }
 
-    return true
-  })
+
+  // return books.value.filter(book => {
+  //   // Search filter
+  //   if (searchQuery.value && !book.title.includes(searchQuery.value) &&
+  //     !book.description.includes(searchQuery.value)) {
+  //     return false
+  //   }
+
+  //   // Dynasty filter
+  //   if (filters.value.cat1 && book.category1 !== filters.value.cat1) {
+  //     return false
+  //   }
+
+  //   // Category filter
+  //   if (filters.value.cat2 && book.category2 !== filters.value.cat2) {
+  //     return false
+  //   }
+
+  //   return true
+  // })
 })
 
 // Filter functions
 const resetFilters = () => {
   searchQuery.value = ''
   filters.value = {
-    dynasty: '',
-    category: ''
+    cat1: '',
+    cat2: '',
   }
 }
 
@@ -473,19 +496,20 @@ const openEntryModal = (book) => {
   if (book) {
     // Edit existing book
     editingBook.value = { ...book }
-  } else {
-    // Create new book
-    editingBook.value = {
-      title: '',
-      author: '',
-      dynasty: '明',
-      year: '',
-      category: '史部',
-      status: '未处理',
-      description: '',
-      coverImage: ''
-    }
   }
+  // else {
+  //   // Create new book
+  //   editingBook.value = {
+  //     title: '',
+  //     author: '',
+  //     dynasty: '明',
+  //     year: '',
+  //     category: '史部',
+  //     status: '未处理',
+  //     description: '',
+  //     coverImage: ''
+  //   }
+  // }
   showEntryModal.value = true
 }
 
@@ -509,7 +533,7 @@ const saveEntry = async () => {
   //   })
   // }
   console.log('Saving formatted book:', formatBook(editingBook.value))
-  const response = await updateItem(editingBook.value.id,formatBook(editingBook.value),authStore.token)
+  const response = await updateItem(editingBook.value.id, formatBook(editingBook.value), authStore.token)
 
   if (response.status === 200) {
     console.log('Book saved successfully:', response)

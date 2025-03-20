@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { BookOpen, User, Lock, LoaderCircle } from 'lucide-vue-next'
 import { useAuthStore } from '@/store/superuser'
 const emit = defineEmits(['gotohome'])
