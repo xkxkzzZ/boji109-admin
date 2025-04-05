@@ -29,13 +29,15 @@
               placeholder="请输入古籍标题" />
           </div>
 
-          <!-- 数据编号 Data ID -->
+          <!-- 数据编号 Custom ID -->
           <div>
             <label for="custom_id" class="block text-sm font-medium text-gray-700 mb-1">数据编号</label>
             <input id="custom_id" v-model="formData.custom_id" type="text" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               placeholder="请输入数据编号" />
           </div>
+
+          
 
 
           <!-- 分类 Category1 -->
@@ -61,17 +63,26 @@
           </div>
 
 
-
-          <!-- 子分类 category3 -->
-          <div>
-            <label for="category3" class="block text-sm font-medium text-gray-700 mb-1">三级分类</label>
-            <input id="category3" v-model="formData.category3" type="text" 
+          <!-- 户籍编号 Household ID -->
+          <!-- <div>
+            <label for="household_id" class="block text-sm font-medium text-gray-700 mb-1">户籍编号</label>
+            <input id="household_id" v-model="formData.household_id" type="text" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请输入三级分类（可选）" />
+              placeholder="请输入户籍编号" />
+          </div> -->
+
+
+          <!-- 位置 Location -->
+          <div class="col-span-1">
+            <label for="location" class="block text-sm font-medium text-gray-700 mb-1">位置</label>
+            <input id="location" v-model="formData.location" type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              placeholder="请输入古籍位置" />
           </div>
 
+
           <!-- 关键词 keywords -->
-          <div class="col-span-1">
+          <!-- <div class="col-span-1">
             <label for="keywords" class="block text-sm font-medium text-gray-700 mb-1">关键词</label>
             <div
               class="flex flex-wrap items-center gap-2 p-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-transparent">
@@ -86,17 +97,17 @@
                 class="flex-grow min-w-[120px] outline-none border-0 focus:ring-0 p-1 text-sm"
                 placeholder="输入关键词后按回车添加" />
             </div>
-          </div>
+          </div> -->
 
 
-          <!-- 年份时间 Year/Time -->
+          <!-- 年份时间 Year -->
           <div>
             <label for="year" class="block text-sm font-medium text-gray-700 mb-1">年份时间</label>
             <input id="year" v-model="formData.year" type="text"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               placeholder="请输入古籍年份时间" />
           </div>
-          
+
           <!-- 定价 Price -->
           <div>
             <label for="price" class="block text-sm font-medium text-gray-700 mb-1">定价</label>
@@ -111,18 +122,9 @@
           </div>
 
           
-
           
-
-          <!-- 形态 Shape -->
-          <div class="col-span-2">
-            <label for="shape" class="block text-sm font-medium text-gray-700 mb-1">形态</label>
-              <textarea id="shape" v-model="formData.shape" rows="2"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请描述古籍形态特征"></textarea>
-          </div>
-
-          <!-- 简介 Brief Introduction -->
+          
+          <!-- 简介 Description -->
           <div class="col-span-2">
             <label for="description" class="block text-sm font-medium text-gray-700 mb-1">简介</label>
             <textarea id="description" v-model="formData.description" rows="4"
@@ -130,8 +132,18 @@
               placeholder="请输入古籍简介"></textarea>
           </div>
 
-          <!-- 封面图片 Cover Image -->
-          <!-- <div>
+          <!-- 形态 Shape -->
+          <div class="col-span-1">
+            <label for="shape" class="block text-sm font-medium text-gray-700 mb-1">形态</label>
+              <textarea id="shape" v-model="formData.shape" rows="2"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              placeholder="请描述古籍形态特征"></textarea>
+          </div>
+
+          
+
+          <!-- 封面图片 Cover -->
+          <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">封面图片</label>
             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
               <div class="space-y-1 text-center">
@@ -146,12 +158,12 @@
                   </label>
                   <p class="pl-1">或拖拽至此处</p>
                 </div>
-                <p class="text-xs text-gray-500">PNG, JPG, GIF 最大 10MB</p>
+                <!-- <p class="text-xs text-gray-500">PNG, JPG, GIF 最大 10MB</p> -->
               </div>
             </div>
-          </div> -->
+          </div>
 
-          <!-- 完整文件 Complete File -->
+          <!-- 完整文件 File -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">完整文件</label>
             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -175,7 +187,7 @@
                   </label>
                   <p class="pl-1">或拖拽至此处</p>
                 </div>
-                <p class="text-xs text-gray-500">PDF, DOCX, TXT 最大 50MB</p>
+                <!-- <p class="text-xs text-gray-500">PDF, DOCX, TXT 最大 50MB</p> -->
               </div>
             </div>
           </div>
@@ -211,17 +223,21 @@ const emit = defineEmits(['finishupload'])
 // Form data
 const formData = reactive({
   title: '',
+  custom_id: '',
+
   category1: '',
   category2: '',
-  category3: '',
-  custom_id: '',
-  keywords: [],
+  household_id: -1,
+
+  location: '',
+  year: '',
+  price: '',
+  
   description: '',
   shape: '',
+
   file: null,
-  coverImage: null,
-  price: '',
-  year: ''
+  cover: null,
 })
 
 // UI state
@@ -290,18 +306,20 @@ const removeTag = (index) => {
 const handleCoverUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
-    formData.coverImage = file
+    formData.cover = file
     const reader = new FileReader()
     reader.onload = (e) => {
       coverPreview.value = e.target.result
     }
     reader.readAsDataURL(file)
   }
+  else {
+    coverPreview.value = null
+  }
 }
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
-
   if (file) {
     formData.file = file 
   }
@@ -316,7 +334,7 @@ const resetForm = () => {
     }
   })
   formData.file = null
-  formData.coverImage = null
+  formData.cover = null
   coverPreview.value = null
 }
 
@@ -330,7 +348,7 @@ const handleSubmit = async () => {
     if (response.status === 200) {
       alert('数据上传成功！')
     } else {
-      alert('上传失败，请重试1')
+      alert(response.data.detail)
     }
     resetForm()
 
@@ -344,17 +362,19 @@ const handleSubmit = async () => {
 
 const formatFormData = (formData) => {
   const newFormData = new FormData()
-  newFormData.append('file', formData.file)
   newFormData.append('title', formData.title)
   newFormData.append('custom_id', formData.custom_id)
   newFormData.append('category1', formData.category1)
   newFormData.append('category2', formData.category2)
-  newFormData.append('category3', formData.category3)
-  newFormData.append('price', formData.price)
+  // newFormData.append('household_id', formData.household_id)
+  newFormData.append('location', formData.location)
   newFormData.append('year', formData.year)
-  newFormData.append('keywords', formData.keywords.join(', '))
+  newFormData.append('price', formData.price)
   newFormData.append('description', formData.description)
   newFormData.append('shape', formData.shape)
+  newFormData.append('file', formData.file)
+  newFormData.append('cover', formData.cover)
+  // newFormData.append('keywords', formData.keywords.join(', '))
   return newFormData
 }
 
