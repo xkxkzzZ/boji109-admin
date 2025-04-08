@@ -1,6 +1,5 @@
 import axios from "axios";
 import { API_BASE_URL } from "./config";
-import { id } from "element-plus/es/locales.mjs";
 
 
 // 新建户名
@@ -34,10 +33,10 @@ export const getAllHouseholds = async () => {
   }
 }
 
-// 根据户名获得对应条目的list
-export const getHouseholdItems = async (name) => {
+// 根据household_id获得对应条目id的list
+export const getHouseholdItemList = async (id) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/item/household/${name}`);
+    const response = await axios.get(`${API_BASE_URL}/item/household/filter/${id}`);
     console.log(response);
     return response;
   } catch (error) {
@@ -45,6 +44,7 @@ export const getHouseholdItems = async (name) => {
     return error.response;
   }
 }
+
 
 // 更新户名信息
 export const updateHousehold = async (id, data, token) => {

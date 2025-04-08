@@ -73,6 +73,9 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
+                <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  封面图
+                </th> -->
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   编号
                 </th>
@@ -86,7 +89,7 @@
                   子分类
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  关键词
+                  地点
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   年份
@@ -101,6 +104,9 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="book in filteredBooks" :key="book.id" class="hover:bg-gray-50">
+                <!-- <td class="px-6 py-4 whitespace-nowrap">
+                  <img :src="book.cover" alt="封面图" class="w-16 h-16 object-cover rounded-md" />
+                </td> -->
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ book.custom_id }}</div>
                 </td>
@@ -115,7 +121,7 @@
                 </td>
                 
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.keywords }}</div>
+                  <div class="text-sm text-gray-900">{{ book.location }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ book.year }}</div>
@@ -152,7 +158,7 @@
     </main>
 
     <!-- Entry Modal -->
-    <div v-if="showEntryModal" class="fixed inset-0 overflow-y-auto z-50">
+    <!-- <div v-if="showEntryModal" class="fixed inset-0 overflow-y-auto z-50">
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
           <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -170,15 +176,11 @@
                   <span class="text-sm text-gray-500">（编号和文件不可修改）</span>
                 </h3>
                 <div class="mt-4 space-y-4">
-                  <!-- Title -->
                   <div>
                     <label for="title" class="block text-sm font-medium text-gray-700">名称</label>
                     <input type="text" id="title" v-model="editingBook.title"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
                   </div>
-
-
-                  <!-- Category and Status -->
                   <div class="grid grid-cols-2 gap-4">
                     <div>
                       <label for="category1" class="block text-sm font-medium text-gray-700">一级分类</label>
@@ -254,7 +256,17 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <EntryModal
+      :visible="showEntryModal"
+      :editingBook="editingBook"
+      :categories="categories"
+      :getsubcategories="getsubcategories"
+      @update:visible="showEntryModal = $event"
+      @save="saveEntry"
+    />
+
 
     <!-- Delete Confirmation Modal -->
     <div v-if="showDeleteModal" class="fixed inset-0 overflow-y-auto z-50">
@@ -306,6 +318,8 @@ import { ref, computed, onMounted } from 'vue'
 import { Search, RefreshCw, Edit, Eye, Trash2, Plus, AlertTriangle } from 'lucide-vue-next'
 import { getItemByIds, updateItem, getFilteredList, getQueryList, deleteItem } from '@/api/item'
 import { useAuthStore } from '@/store/superuser'
+import EntryModal from '@/components/item/entrymodel.vue'
+
 const authStore = useAuthStore()
 const emit = defineEmits(['startupload'])
 

@@ -4,8 +4,8 @@
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4 flex justify-between">
         <div >
-          <h1 class="text-xl font-bold text-gray-800">上传古籍数据</h1>
-          <p class="text-sm text-gray-500 mt-1">请填写以下信息完成古籍数据上传</p>
+          <h1 class="text-xl font-bold text-gray-800">上传数据</h1>
+          <p class="text-sm text-gray-500 mt-1"></p>
         </div>
         <div>
           <button @click="emit('finishupload')"
@@ -26,7 +26,7 @@
             <label for="title" class="block text-sm font-medium text-gray-700 mb-1">标题</label>
             <input id="title" v-model="formData.title" type="text" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请输入古籍标题" />
+              placeholder="" />
           </div>
 
           <!-- 数据编号 Custom ID -->
@@ -34,7 +34,7 @@
             <label for="custom_id" class="block text-sm font-medium text-gray-700 mb-1">数据编号</label>
             <input id="custom_id" v-model="formData.custom_id" type="text" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请输入数据编号" />
+              placeholder="" />
           </div>
 
           
@@ -45,7 +45,7 @@
             <label for="category1" class="block text-sm font-medium text-gray-700 mb-1">一级分类</label>
             <select id="category1" v-model="formData.category1" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              @change="loadSubcategories">
+              @change="onCategory1Change">
               <!-- <option value="" disabled selected>请选择一级分类</option> -->
               <option v-for="cat in categories" :key="cat.id" :value="cat.name">{{ cat.name }}</option>
             </select>
@@ -55,29 +55,42 @@
           <div>
             <label for="category2" class="block text-sm font-medium text-gray-700 mb-1">二级分类</label>
             <select id="category2" v-model="formData.category2" required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              :disabled="!formData.category1">
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:bg-gray-50"
+              :disabled="!formData.category1"
+              @change="onCategory2Change">
               <!-- <option value="" disabled selected>请选择二级分类</option> -->
               <option v-for="subcat in subcategories" :key="subcat.id" :value="subcat.name">{{ subcat.name }}</option>
             </select>
           </div>
 
+          <!-- 户名 Household ID -->
+          <div>
+            <label for="household_id" class="block text-sm font-medium text-gray-700 mb-1">户名</label>
+            <el-select
+              v-model="formData.household_id"
+              filterable
+              placeholder=""
+              style="width: 240px"
+              :disabled="formData.category1!='归户' || !formData.category2"
 
-          <!-- 户籍编号 Household ID -->
-          <!-- <div>
-            <label for="household_id" class="block text-sm font-medium text-gray-700 mb-1">户籍编号</label>
-            <input id="household_id" v-model="formData.household_id" type="text" required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请输入户籍编号" />
-          </div> -->
-
+            >
+              <el-option
+                v-for="item in filteredHouseholds"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </div>
+          
+          
 
           <!-- 位置 Location -->
           <div class="col-span-1">
-            <label for="location" class="block text-sm font-medium text-gray-700 mb-1">位置</label>
+            <label for="location" class="block text-sm font-medium text-gray-700 mb-1">地点</label>
             <input id="location" v-model="formData.location" type="text"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请输入古籍位置" />
+              placeholder="" />
           </div>
 
 
@@ -105,7 +118,7 @@
             <label for="year" class="block text-sm font-medium text-gray-700 mb-1">年份时间</label>
             <input id="year" v-model="formData.year" type="text"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请输入古籍年份时间" />
+              placeholder="" />
           </div>
 
           <!-- 定价 Price -->
@@ -129,7 +142,7 @@
             <label for="description" class="block text-sm font-medium text-gray-700 mb-1">简介</label>
             <textarea id="description" v-model="formData.description" rows="4"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请输入古籍简介"></textarea>
+              placeholder=""></textarea>
           </div>
 
           <!-- 形态 Shape -->
@@ -137,7 +150,7 @@
             <label for="shape" class="block text-sm font-medium text-gray-700 mb-1">形态</label>
               <textarea id="shape" v-model="formData.shape" rows="2"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              placeholder="请描述古籍形态特征"></textarea>
+              placeholder=""></textarea>
           </div>
 
           
@@ -217,6 +230,9 @@
 import { ref, reactive } from 'vue'
 import { uploadItem } from '@/api/item'
 import { useAuthStore } from '@/store/superuser';
+import { getAllHouseholds } from '@/api/household';
+
+
 const authStore = useAuthStore();
 const emit = defineEmits(['finishupload'])
 
@@ -286,10 +302,33 @@ const subcategoriesMap = {
 
 const subcategories = ref([])
 
+
+const households = ref([]);
+const filteredHouseholds = ref([]);
+
+const fetchHouseholds = async () => {
+  try {
+    const response = await getAllHouseholds();
+    households.value = response.data;
+  } catch (error) {
+    console.error('Failed to fetch households:', error);
+  }
+};
+
+
 // Methods
-const loadSubcategories = () => {
+const onCategory1Change = () => {
+  // load subcategories
   subcategories.value = subcategoriesMap[formData.category1] || []
   formData.category2 = ''
+  // load households
+  if(formData.category1 === '归户'){
+    fetchHouseholds()
+  }
+}
+
+const onCategory2Change = () => {
+  filteredHouseholds.value = households.value.filter(household => household.category2 === formData.category2)
 }
 
 const addTag = () => {
@@ -320,8 +359,10 @@ const handleCoverUpload = (event) => {
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
+  console.log('file:', file)
   if (file) {
     formData.file = file 
+    console.log('formData.file:', formData.file)
   }
 }
 
@@ -341,14 +382,15 @@ const resetForm = () => {
 const handleSubmit = async () => {
   try {
     isSubmitting.value = true
-
+    console.log('formData:', formData)
     console.log('formatted data:', formatFormData(formData))
 
     const response = await uploadItem(formatFormData(formData), authStore.token)
     if (response.status === 200) {
       alert('数据上传成功！')
     } else {
-      alert(response.data.detail)
+      
+      alert('response.data.detail')
     }
     resetForm()
 
@@ -377,8 +419,6 @@ const formatFormData = (formData) => {
   // newFormData.append('keywords', formData.keywords.join(', '))
   return newFormData
 }
-
-
 
 
 </script>
