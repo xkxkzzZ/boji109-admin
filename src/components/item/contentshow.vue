@@ -108,7 +108,7 @@
                   <img :src="book.cover" alt="封面图" class="w-16 h-16 object-cover rounded-md" />
                 </td> -->
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.custom_id }}</div>
+                  <div class="text-sm text-gray-900">{{ book.customId }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ book.title }}</div>
@@ -341,7 +341,7 @@ const currentBook = ref(null)
 const bookToDelete = ref(null)
 const editingBook = ref({
   id: 0,
-  custom_id: '',
+  customId: '',
   title: '',
   category1: '',
   category2: '',
@@ -401,7 +401,8 @@ const getsubcategories = (cat1) => {
 const fetchBooks = async (ids) => {
   try {
     const response = await getItemByIds(ids)
-    return response.data
+    console.log(response.data.message)
+    return response.data.data
   } catch (error) {
     console.error('Error fetching books:', error)
   }
@@ -412,8 +413,8 @@ const filtedlist = async (cat1, cat2) => {
     cat1 = cat1 === '' ? null : cat1
     cat2 = cat2 === '' ? null : cat2
     const response = await getFilteredList({ category1: cat1, category2: cat2 })
-    console.log(response.data)
-    return response.data
+    console.log(response.data.message)
+    return response.data.data
   } catch (error) {
     console.error('Error fetching books:', error)
   }

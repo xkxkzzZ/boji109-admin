@@ -91,7 +91,7 @@ const handleLogin = async () => {
       alert(res.data.message)
       emit('gotohome')
     }else{
-      alert(res.data.detail)
+      alert(res.data.message)
     }
     
   } catch (error) {

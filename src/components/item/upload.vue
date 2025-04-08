@@ -31,8 +31,8 @@
 
           <!-- 数据编号 Custom ID -->
           <div>
-            <label for="custom_id" class="block text-sm font-medium text-gray-700 mb-1">数据编号</label>
-            <input id="custom_id" v-model="formData.custom_id" type="text" required
+            <label for="customId" class="block text-sm font-medium text-gray-700 mb-1">数据编号</label>
+            <input id="customId" v-model="formData.customId" type="text" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               placeholder="" />
           </div>
@@ -65,9 +65,9 @@
 
           <!-- 户名 Household ID -->
           <div>
-            <label for="household_id" class="block text-sm font-medium text-gray-700 mb-1">户名</label>
+            <label for="householdId" class="block text-sm font-medium text-gray-700 mb-1">户名</label>
             <el-select
-              v-model="formData.household_id"
+              v-model="formData.householdId"
               filterable
               placeholder=""
               style="width: 240px"
@@ -239,11 +239,11 @@ const emit = defineEmits(['finishupload'])
 // Form data
 const formData = reactive({
   title: '',
-  custom_id: '',
+  customId: '',
 
   category1: '',
   category2: '',
-  household_id: -1,
+  householdId: -1,
 
   location: '',
   year: '',
@@ -387,10 +387,10 @@ const handleSubmit = async () => {
 
     const response = await uploadItem(formatFormData(formData), authStore.token)
     if (response.status === 200) {
-      alert('数据上传成功！')
+      // alert('数据上传成功！')
+      alert(response.data.message)
     } else {
-      
-      alert('response.data.detail')
+      alert(response.data.message)
     }
     resetForm()
 
@@ -405,10 +405,10 @@ const handleSubmit = async () => {
 const formatFormData = (formData) => {
   const newFormData = new FormData()
   newFormData.append('title', formData.title)
-  newFormData.append('custom_id', formData.custom_id)
+  newFormData.append('customId', formData.customId)
   newFormData.append('category1', formData.category1)
   newFormData.append('category2', formData.category2)
-  // newFormData.append('household_id', formData.household_id)
+  // newFormData.append('householdId', formData.householdId)
   newFormData.append('location', formData.location)
   newFormData.append('year', formData.year)
   newFormData.append('price', formData.price)

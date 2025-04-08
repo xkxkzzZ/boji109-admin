@@ -2,7 +2,7 @@
   <Upload v-if="isuploading" @finishupload="isuploading = false" />
   <ContentShow v-else @startupload="isuploading = true" />
 
-  <household />
+  <!-- <household /> -->
 
 
 </template>

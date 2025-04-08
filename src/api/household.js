@@ -33,7 +33,7 @@ export const getAllHouseholds = async () => {
   }
 }
 
-// 根据household_id获得对应条目id的list
+// 根据householdId获得对应条目id的list
 export const getHouseholdItemList = async (id) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/item/household/filter/${id}`);

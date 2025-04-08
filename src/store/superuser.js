@@ -1,11 +1,9 @@
 import {defineStore} from 'pinia'
 import { superlogin } from '@/api/auth';
-import { uploadItem } from '@/api/item';
 
 export const useAuthStore = defineStore( 'auth', {
   state: () => ({
     isAuthenticated: false,
-    username: null,
     token: null,
   }),
   actions: {
@@ -13,19 +11,14 @@ export const useAuthStore = defineStore( 'auth', {
       const response = await superlogin(form);
       if (response.status === 200) {
         this.isAuthenticated = true;
-        this.username = response.data.username;
-        this.token = response.data.token;
+        this.token = response.data.data.token;
+        console.log(this.token);
       }
       return response;
     },
-    async debuglogin() {
-      this.isAuthenticated = true;
-      this.username = "debug";
-      this.token = "debug";
-    },
+    
     async superlogout() {
       this.isAuthenticated = false;
-      this.username = null;
       this.token = null;
     },
   },

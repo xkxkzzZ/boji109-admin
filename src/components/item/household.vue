@@ -497,7 +497,7 @@ const saveHousehold = async () => {
       if (response.status === 200){
         // alert(response.data.message);
       }else{
-        alert(response.data.detail);
+        alert(response.data.message);
       }      
     } else {
       // 添加新户名
@@ -506,7 +506,7 @@ const saveHousehold = async () => {
       if (response.status === 200){
         // alert(response.data.message);
       }else{
-        alert(response.data.detail);
+        alert(response.data.message);
       }
     }
     fetchHouseholds();
@@ -533,7 +533,7 @@ const deletehh = async () => {
     if (response.status === 200){
       // alert(response.data.message);
     }else{
-      alert(response.data.detail);
+      alert(response.data.message);
     }
     fetchHouseholds();
     closeDeleteConfirm();
