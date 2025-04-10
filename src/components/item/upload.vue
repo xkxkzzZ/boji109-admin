@@ -137,9 +137,9 @@
           
           
           
-          <!-- 简介 Description -->
+          <!-- 描述 Description -->
           <div class="col-span-2">
-            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">简介</label>
+            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">描述</label>
             <textarea id="description" v-model="formData.description" rows="4"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               placeholder=""></textarea>
@@ -389,11 +389,10 @@ const handleSubmit = async () => {
     if (response.status === 200) {
       // alert('数据上传成功！')
       alert(response.data.message)
+      resetForm()
     } else {
       alert(response.data.message)
     }
-    resetForm()
-
   } catch (error) {
     console.error('Submission failed:', error)
     alert('上传失败，请重试2')

@@ -62,12 +62,12 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700">简介</label>
+              <label class="block text-sm font-medium text-gray-700">描述</label>
               <textarea v-model="editingBook.description" rows="4"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md 
                                focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent 
                                sm:text-sm"
-                        placeholder="请输入古籍简介"></textarea>
+                        placeholder="请输入古籍描述"></textarea>
             </div>
           </div>
         </div>

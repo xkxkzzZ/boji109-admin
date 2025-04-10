@@ -15,7 +15,7 @@ export const uploadItem = async (form, token) => {
     console.log(response);
     return response;
   } catch (error) {
-    console.log(error.response);
+    console.log(error);
     return error.response;
   }
 }
