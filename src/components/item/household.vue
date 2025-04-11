@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen ">
     <!-- Header -->
-    <header class="bg-white shadow-sm">
+    <header class=" shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-6">
           <h1 class="text-2xl font-semibold text-gray-700">户名管理</h1>
@@ -282,7 +282,7 @@
                 </h3>
                 <div class="mt-2">
                   <p class="text-sm text-gray-500">
-                    您确定要删除户名 "{{ currentHousehold.name }}" 吗？此操作无法撤销，该户名下的所有章节数据也将被删除。
+                    确定要删除户名 "{{ currentHousehold.name }}" 吗？该户名下的所有条目会成为未绑定户名状态。
                   </p>
                 </div>
               </div>
@@ -323,7 +323,7 @@ const households = ref([]);
 const fetchHouseholds = async () => {
   try {
     const response = await getAllHouseholds();
-    households.value = response.data;
+    households.value = response.data.data;
   } catch (error) {
     console.error('Failed to fetch households:', error);
   }
@@ -501,6 +501,7 @@ const saveHousehold = async () => {
       }      
     } else {
       // 添加新户名
+      console.log(currentHousehold.value);
       const response = await createHousehold(currentHousehold.value, authStore.token);
       
       if (response.status === 200){

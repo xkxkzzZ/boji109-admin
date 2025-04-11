@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-r from-green-50 to-blue-50 py-8 px-4">
+  <div class="min-h-screen py-8 px-4">
+    <!-- bg-gradient-to-r from-green-50 to-blue-50  -->
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4 flex justify-between">
@@ -8,10 +9,10 @@
           <p class="text-sm text-gray-500 mt-1"></p>
         </div>
         <div>
-          <button @click="emit('finishupload')"
+          <!-- <button @click="emit('finishupload')"
             class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
             返回目录
-          </button>
+          </button> -->
 
 
         </div>
@@ -72,7 +73,7 @@
               placeholder=""
               style="width: 240px"
               :disabled="formData.category1!='归户' || !formData.category2"
-
+              clearable
             >
               <el-option
                 v-for="item in filteredHouseholds"
@@ -243,7 +244,7 @@ const formData = reactive({
 
   category1: '',
   category2: '',
-  householdId: -1,
+  householdId: null,
 
   location: '',
   year: '',
@@ -309,7 +310,7 @@ const filteredHouseholds = ref([]);
 const fetchHouseholds = async () => {
   try {
     const response = await getAllHouseholds();
-    households.value = response.data;
+    households.value = response.data.data;
   } catch (error) {
     console.error('Failed to fetch households:', error);
   }
@@ -342,20 +343,49 @@ const removeTag = (index) => {
   formData.keywords.splice(index, 1)
 }
 
-const handleCoverUpload = (event) => {
+// const handleCoverUpload = (event) => {
+//   const file = event.target.files[0]
+//   if (file) {
+//     formData.cover = file
+//     const reader = new FileReader()
+//     reader.onload = (e) => {
+//       coverPreview.value = e.target.result
+//     }
+//     reader.readAsDataURL(file)
+//   }
+//   else {
+//     coverPreview.value = null
+//   }
+// }
+import imageCompression from 'browser-image-compression'
+
+const handleCoverUpload = async (event) => {
   const file = event.target.files[0]
-  if (file) {
-    formData.cover = file
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      coverPreview.value = e.target.result
-    }
-    reader.readAsDataURL(file)
-  }
-  else {
+  if (!file) {
     coverPreview.value = null
+    formData.cover = null
+    return
+  }
+
+  try {
+    const options = {
+      maxSizeMB: 0.5, // 压缩目标最大体积（单位 MB）
+      maxWidthOrHeight: 1024, // 限制最大宽高（可选）
+      useWebWorker: true, // 开启 Web Worker，提升性能
+    }
+
+    const compressedFile = await imageCompression(file, options)
+    formData.cover = compressedFile
+
+    // 生成预览
+    const previewUrl = await imageCompression.getDataUrlFromFile(compressedFile)
+    coverPreview.value = previewUrl
+
+  } catch (error) {
+    console.error('图片压缩失败:', error)
   }
 }
+
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
@@ -407,7 +437,7 @@ const formatFormData = (formData) => {
   newFormData.append('customId', formData.customId)
   newFormData.append('category1', formData.category1)
   newFormData.append('category2', formData.category2)
-  // newFormData.append('householdId', formData.householdId)
+  if( formData.householdId ) newFormData.append('householdId', formData.householdId)
   newFormData.append('location', formData.location)
   newFormData.append('year', formData.year)
   newFormData.append('price', formData.price)

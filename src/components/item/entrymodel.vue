@@ -18,9 +18,16 @@
                             focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"/>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">编号</label>
+              <input v-model="editingBook.customId" type="text"
+                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 
+                            focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"/>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700">一级分类</label>
+                <label class="block text-sm font-medium text-gray-700">分类</label>
                 <select v-model="editingBook.category1"
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 
                                focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm">
@@ -29,7 +36,7 @@
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700">二级分类</label>
+                <label class="block text-sm font-medium text-gray-700">子分类</label>
                 <select v-model="editingBook.category2" :disabled="!editingBook.category1"
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 
                                focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm">
@@ -38,11 +45,12 @@
                   </option>
                 </select>
               </div>
+              <!-- 户名householdid -->
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700">关键词</label>
-              <input v-model="editingBook.keywords" type="text"
+              <label class="block text-sm font-medium text-gray-700">地点</label>
+              <input v-model="editingBook.location" type="text"
                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 
                             focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"/>
             </div>
@@ -61,14 +69,7 @@
                             focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"/>
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700">描述</label>
-              <textarea v-model="editingBook.description" rows="4"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md 
-                               focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent 
-                               sm:text-sm"
-                        placeholder="请输入古籍描述"></textarea>
-            </div>
+            
           </div>
         </div>
 

@@ -7,6 +7,8 @@ import Library from '@/pages/library.vue';
 import User from '@/pages/user.vue';
 import Order from '@/pages/order.vue';
 import Info from '@/pages/info.vue';
+import ItemDetail from '@/pages/item.vue';
+
 
 
 const routes = [
@@ -17,6 +19,12 @@ const routes = [
   { path: '/user', component: User },
   { path: '/order', component: Order },
   { path: '/info', component: Info },
+  {
+    path: '/item/:id',
+    name: 'ItemDetail',
+    component: ItemDetail,
+    props: true, 
+  },
 ];
 
 const router = createRouter({

@@ -5,18 +5,17 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Page Header -->
-      <div class="flex justify-between items-center mb-6">
+      <!-- <div class="flex justify-between items-center mb-6">
         <div>
           <h1 class="text-2xl font-medium text-gray-800">古籍条目管理</h1>
           <p class="text-gray-500 mt-1">管理、编辑和上传古籍条目信息</p>
         </div>
-        <!--  @click="openEntryModal(null)"-->
         <button @click="emit('startupload')"
           class="flex items-center py-2 px-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
           <plus class="w-4 h-4 mr-1" />
           <span>新增条目</span>
         </button>
-      </div>
+      </div> -->
 
       <!-- Search and Filter Section -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
@@ -70,72 +69,45 @@
       <!-- Books Table -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
+          <table class="min-w-full divide-y divide-gray-200 text-sm">
             <thead class="bg-gray-50">
               <tr>
-                <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  封面图
-                </th> -->
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  编号
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  名称
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  分类
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  子分类
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  地点
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  年份
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  价格
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  操作
-                </th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">编号</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">封面</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">标题</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">分类</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">子分类</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">户名</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">地点</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">年份</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">价格</th>
+                <th class="px-4 py-2.5 text-left font-medium text-gray-500 uppercase tracking-wide">操作</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="book in filteredBooks" :key="book.id" class="hover:bg-gray-50">
-                <!-- <td class="px-6 py-4 whitespace-nowrap">
-                  <img :src="book.cover" alt="封面图" class="w-16 h-16 object-cover rounded-md" />
-                </td> -->
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.customId }}</div>
+                <td class="px-4 py-2.5 text-gray-900">{{ book.customId }}</td>
+                <td class="px-4 py-2.5">
+                  <img :src="book.coverPath ? `http://localhost:8080/files/${book.coverPath}` : defaultCover" alt="封面图"
+                    class="w-14 h-14 object-cover rounded" />
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.title }}</div>
+                <td class="px-4 py-2.5 text-gray-900">{{ book.title }}</td>
+                <td class="px-4 py-2.5 text-gray-900">{{ book.category1 }}</td>
+                <td class="px-4 py-2.5 text-gray-900">{{ book.category2 }}</td>
+                <td class="px-4 py-2.5 text-gray-900 break-words">
+                  <div class="truncate max-w-[50px]" :title="getHouseholdNameById(book.householdId)">
+                    {{ getHouseholdNameById(book.householdId) }}
+                  </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.category1 }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.category2 }}</div>
-                </td>
-                
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.location }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.year }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.price }}</div>
-                </td>
-
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div class="flex space-x-2">
+                <td class="px-4 py-2.5 text-gray-900">{{ book.location }}</td>
+                <td class="px-4 py-2.5 text-gray-900">{{ book.year }}</td>
+                <td class="px-4 py-2.5 text-gray-900">{{ book.price }}</td>
+                <td class="px-4 py-2.5 text-gray-500">
+                  <div class="flex space-x-1">
                     <button @click="openEntryModal(book)" class="text-emerald-600 hover:text-emerald-900">
                       <edit class="h-4 w-4" />
                     </button>
-                    <button @click="viewDetails(book)" class="text-blue-600 hover:text-blue-900">
+                    <button @click="viewDetails(book.id)" class="text-blue-600 hover:text-blue-900">
                       <eye class="h-4 w-4" />
                     </button>
                     <button @click="confirmDelete(book)" class="text-red-600 hover:text-red-900">
@@ -149,12 +121,14 @@
         </div>
 
         <!-- Pagination -->
-        <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-          <p class="text-sm text-gray-700">
+        <div class="bg-white px-4 py-2.5 flex items-center justify-between border-t border-gray-200 text-sm">
+          <p class="text-gray-700">
             共 <span class="font-medium">{{ books.length }}</span> 条
           </p>
         </div>
       </div>
+
+
     </main>
 
     <!-- Entry Modal -->
@@ -258,14 +232,8 @@
       </div>
     </div> -->
 
-    <EntryModal
-      :visible="showEntryModal"
-      :editingBook="editingBook"
-      :categories="categories"
-      :getsubcategories="getsubcategories"
-      @update:visible="showEntryModal = $event"
-      @save="saveEntry"
-    />
+    <EntryModal :visible="showEntryModal" :editingBook="editingBook" :categories="categories"
+      :getsubcategories="getsubcategories" @update:visible="showEntryModal = $event" @save="saveEntry" />
 
 
     <!-- Delete Confirmation Modal -->
@@ -317,21 +285,24 @@
 import { ref, computed, onMounted } from 'vue'
 import { Search, RefreshCw, Edit, Eye, Trash2, Plus, AlertTriangle } from 'lucide-vue-next'
 import { getItemByIds, updateItem, getFilteredList, getQueryList, deleteItem } from '@/api/item'
+import { getAllHouseholds } from '@/api/household'
 import { useAuthStore } from '@/store/superuser'
 import EntryModal from '@/components/item/entrymodel.vue'
+const defaultCover = '/images/default-cover.png' // 确保你有这个默认图
 
 const authStore = useAuthStore()
 const emit = defineEmits(['startupload'])
 
 onMounted(async () => {
   fetchData()
+  await fetchHouseholds()
 })
 
 // Search and filter state
 const searchQuery = ref('')
 const filters = ref({
-  cat1: '',
-  cat2: '',
+  cat1: '全部',
+  cat2: '全部',
 })
 
 // Modal states
@@ -356,6 +327,7 @@ const editingBook = ref({
 const books = ref([])
 
 const categories = [
+  { id: 'quanbu', name: '全部' },
   { id: 'sanye', name: '散叶' },
   { id: 'guihu', name: '归户' },
   { id: 'lingce', name: '另册' }
@@ -363,6 +335,7 @@ const categories = [
 
 const subcategoriesMap = {
   '散叶': [
+    { id: 'quanbu', name: '全部' },
     { id: 'qiyue', name: '契约' },
     { id: 'hetong', name: '合同' },
     { id: 'piaozheng', name: '票证' },
@@ -373,6 +346,7 @@ const subcategoriesMap = {
     { id: 'qita', name: '其他' }
   ],
   '归户': [
+    { id: 'quanbu', name: '全部' },
     { id: 'hunhe', name: '混合类' },
     { id: 'shangye', name: '商业类' },
     { id: 'gongye', name: '工业类' },
@@ -382,6 +356,7 @@ const subcategoriesMap = {
     { id: 'hunshang', name: '婚丧类' }
   ],
   '另册': [
+    { id: 'quanbu', name: '全部' },
     { id: 'hunhe', name: '混合类' },
     { id: 'shangye', name: '商业类' },
     { id: 'gongye', name: '工业类' },
@@ -397,6 +372,21 @@ const getsubcategories = (cat1) => {
   return subcategoriesMap[cat1] || []
 }
 
+const households = ref([]);
+const fetchHouseholds = async () => {
+  try {
+    const response = await getAllHouseholds();
+    households.value = response.data.data;
+  } catch (error) {
+    console.error('Failed to fetch households:', error);
+  }
+};
+function getHouseholdNameById(id) {
+  const match = households.value.find(h => h.id === id)
+  return match ? match.name : '' // 没找到就显示个占位符
+}
+
+
 // Fetch books from API
 const fetchBooks = async (ids) => {
   try {
@@ -410,8 +400,8 @@ const fetchBooks = async (ids) => {
 
 const filtedlist = async (cat1, cat2) => {
   try {
-    cat1 = cat1 === '' ? null : cat1
-    cat2 = cat2 === '' ? null : cat2
+    cat1 = cat1 === '全部' ? null : cat1
+    cat2 = cat2 === '全部' ? null : cat2
     const response = await getFilteredList({ category1: cat1, category2: cat2 })
     console.log(response.data.message)
     return response.data.data
@@ -437,13 +427,20 @@ const fetchData = async () => {
     const filterlist = await filtedlist(filters.value.cat1, filters.value.cat2);
     console.log("filterlist", filterlist);
 
-    if (searchQuery.value === '') {
-      books.value = await fetchBooks(filterlist);
-    } else {
+    let finallist = filterlist
+
+    if (searchQuery.value) {
       const querylist = await queriedlist(searchQuery.value);
       console.log("querylist", querylist);
-      books.value = await fetchBooks(filterlist.filter(x => querylist.includes(x)));
+      finallist = filterlist.filter(x => querylist.includes(x));
     }
+
+    finallist.reverse()
+    console.log("finallist", finallist);
+    books.value = await fetchBooks(finallist);
+
+
+
   } catch (error) {
     console.error("获取数据出错:", error);
   }
@@ -490,14 +487,15 @@ const saveEntry = async () => {
 const formatBook = (book) => {
   return {
     title: book.title,
+    customId: book.customId,
     category1: book.category1,
     category2: book.category2,
-    category3: book.category3,
-    keywords: book.keywords,
+    householdId: book.householdId,
+    location: book.location,
     year: book.year,
     price: book.price,
-    shape: book.shape,
     description: book.description,
+    shape: book.shape,
   }
 }
 
@@ -521,8 +519,10 @@ const deleteEntry = async () => {
 }
 
 // View details function
-const viewDetails = (book) => {
-  console.log('Viewing details for:', book.title)
+const viewDetails = (id) => {
+  console.log('Viewing details for:', id)
+  window.open(`/item/${id}`, '_blank'); // 在新标签页打开
+
 }
 
 </script>
