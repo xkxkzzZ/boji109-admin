@@ -1,6 +1,53 @@
 <template>
   <div class="min-h-screen bg-[#f8f7f4]">
 
+    <div v-if="showEntryModal" class="fixed inset-0 overflow-y-auto z-50">
+      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+
+        <div
+          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">编辑条目</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">描述</label>
+                <textarea v-model="itemInfo.description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                               focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent 
+                               sm:text-sm" placeholder="请输入古籍描述"></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">形态</label>
+                <textarea v-model="itemInfo.shape" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                               focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent 
+                               sm:text-sm" placeholder="请输入古籍形态"></textarea>
+              </div>
+
+
+            </div>
+          </div>
+
+          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <button @click="saveEntry" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 
+                         bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 
+                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 
+                         sm:ml-3 sm:w-auto sm:text-sm">
+              保存
+            </button>
+            <button @click="showEntryModal=false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 
+                         bg-white text-base font-medium text-gray-700 hover:bg-gray-50 
+                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 
+                         sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+              取消
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-6">
       <!-- Back Navigation -->
@@ -19,15 +66,12 @@
         <div class="flex flex-col lg:flex-row gap-6">
           <div class="w-full lg:w-1/4 xl:w-1/5">
             <div class="aspect-[3/4] bg-gray-100 rounded-md overflow-hidden">
-              <img
-                :src="itemInfo.coverPath ? `http://localhost:8080/files/${itemInfo.coverPath}` : defaultCover"
-                :alt="itemInfo.title"
-                class="w-full h-full object-cover"
-              />
+              <img :src="itemInfo.coverPath ? `http://localhost:8080/files/${itemInfo.coverPath}` : defaultCover"
+                :alt="itemInfo.title" class="w-full h-full object-cover" />
             </div>
           </div>
 
-          
+
 
 
           <div class="w-full lg:w-3/4 xl:w-4/5">
@@ -70,6 +114,12 @@
               <p class="text-gray-700">{{ itemInfo.shape }}</p>
             </div>
           </div>
+          <div class="mb-6">
+            <button @click="showEntryModal = true"
+              class="flex items-center text-primary-600 hover:text-primary-800 bg-primary-50 px-4 py-2 rounded-md">
+              编辑详细信息
+            </button>
+          </div>
         </div>
       </div>
 
@@ -78,117 +128,71 @@
         <div class="border-b border-gray-200 px-6 py-4 flex justify-between items-center">
           <h2 class="text-lg font-medium text-gray-800">预览内容</h2>
           <div class="flex items-center space-x-4">
-            <button 
-              @click="toggleThumbnails" 
-              class="p-1.5 rounded-md hover:bg-gray-100 flex items-center"
-              :class="{ 'bg-gray-100': showThumbnails }"
-            >
+            <button @click="toggleThumbnails" class="p-1.5 rounded-md hover:bg-gray-100 flex items-center"
+              :class="{ 'bg-gray-100': showThumbnails }">
               <panel-left-icon class="h-5 w-5" />
               <span class="ml-1 text-sm">{{ showThumbnails ? '隐藏缩略图' : '显示缩略图' }}</span>
             </button>
             <div class="flex items-center space-x-2">
-              <button 
-                @click="zoomOut" 
-                class="p-1.5 rounded-md hover:bg-gray-100"
-                :disabled="scale <= 0.5"
-                :class="{ 'text-gray-400 cursor-not-allowed': scale <= 0.5 }"
-              >
+              <button @click="zoomOut" class="p-1.5 rounded-md hover:bg-gray-100" :disabled="scale <= 0.5"
+                :class="{ 'text-gray-400 cursor-not-allowed': scale <= 0.5 }">
                 <minus-icon class="h-5 w-5" />
               </button>
               <span class="text-sm text-gray-600">{{ Math.round(scale * 100) }}%</span>
-              <button 
-                @click="zoomIn" 
-                class="p-1.5 rounded-md hover:bg-gray-100"
-                :disabled="scale >= 2"
-                :class="{ 'text-gray-400 cursor-not-allowed': scale >= 2 }"
-              >
+              <button @click="zoomIn" class="p-1.5 rounded-md hover:bg-gray-100" :disabled="scale >= 2"
+                :class="{ 'text-gray-400 cursor-not-allowed': scale >= 2 }">
                 <plus-icon class="h-5 w-5" />
               </button>
             </div>
             <div class="flex items-center space-x-2">
-              <button 
-                @click="prevPage" 
-                class="p-1.5 rounded-md hover:bg-gray-100"
-                :disabled="currentPage <= 1"
-                :class="{ 'text-gray-400 cursor-not-allowed': currentPage <= 1 }"
-              >
+              <button @click="prevPage" class="p-1.5 rounded-md hover:bg-gray-100" :disabled="currentPage <= 1"
+                :class="{ 'text-gray-400 cursor-not-allowed': currentPage <= 1 }">
                 <chevron-left-icon class="h-5 w-5" />
               </button>
               <span class="text-sm text-gray-600">{{ currentPage }} / {{ totalPages }}</span>
-              <button 
-                @click="nextPage" 
-                class="p-1.5 rounded-md hover:bg-gray-100"
-                :disabled="currentPage >= totalPages"
-                :class="{ 'text-gray-400 cursor-not-allowed': currentPage >= totalPages }"
-              >
+              <button @click="nextPage" class="p-1.5 rounded-md hover:bg-gray-100" :disabled="currentPage >= totalPages"
+                :class="{ 'text-gray-400 cursor-not-allowed': currentPage >= totalPages }">
                 <chevron-right-icon class="h-5 w-5" />
               </button>
             </div>
           </div>
         </div>
-        
+
         <div class="flex bg-gray-100">
           <!-- Thumbnails Sidebar -->
-          <div 
-            v-if="showThumbnails" 
-            class="w-[180px] border-r border-gray-200 bg-white overflow-y-auto h-[600px] flex-shrink-0"
-          >
+          <div v-if="showThumbnails"
+            class="w-[180px] border-r border-gray-200 bg-white overflow-y-auto h-[600px] flex-shrink-0">
             <div class="p-3">
               <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">页面预览</h3>
               <div class="space-y-3">
-                <div 
-                  v-for="page in pageArray" 
-                  :key="page"
-                  @click="goToPage(page)"
-                  class="cursor-pointer group"
-                >
-                  <div 
-                    class="relative border rounded overflow-hidden"
-                    :class="currentPage === page ? 'border-primary-500 shadow-sm' : 'border-gray-200 group-hover:border-gray-300'"
-                  >
-                    <div 
-                      class="absolute top-0 right-0 text-xs px-1.5 py-0.5 rounded-bl"
-                      :class="currentPage === page ? 'bg-primary-500 text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'"
-                    >
+                <div v-for="page in pageArray" :key="page" @click="goToPage(page)" class="cursor-pointer group">
+                  <div class="relative border rounded overflow-hidden"
+                    :class="currentPage === page ? 'border-primary-500 shadow-sm' : 'border-gray-200 group-hover:border-gray-300'">
+                    <div class="absolute top-0 right-0 text-xs px-1.5 py-0.5 rounded-bl"
+                      :class="currentPage === page ? 'bg-primary-500 text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'">
                       {{ page }}
                     </div>
-                    
-                    <canvas 
-                      :ref="el => { if (el) thumbnailCanvases[page-1] = el }" 
-                      class="w-full"
-                      width="150"
-                      height="200"
-                    ></canvas>
+
+                    <canvas :ref="el => { if (el) thumbnailCanvases[page - 1] = el }" class="w-full" width="150"
+                      height="200"></canvas>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <!-- Main PDF Viewer -->
-          <div 
-            ref="pdfContainer"
-            class="relative flex-grow h-[600px] overflow-auto"
-            @mousedown="startDrag"
-            @mousemove="onDrag"
-            @mouseup="stopDrag"
-            @mouseleave="stopDrag"
-          >
-            <div 
-              ref="pdfContent"
-              :style="{
-                transform: `scale(${scale})`,
-                transformOrigin: 'top left',
-                position: 'absolute',
-                left: `${position.x}px`,
-                top: `${position.y}px`
-              }"
-            >
+          <div ref="pdfContainer" class="relative flex-grow h-[600px] overflow-auto" @mousedown="startDrag"
+            @mousemove="onDrag" @mouseup="stopDrag" @mouseleave="stopDrag">
+            <div ref="pdfContent" :style="{
+              transform: `scale(${scale})`,
+              transformOrigin: 'top left',
+              position: 'absolute',
+              left: `${position.x}px`,
+              top: `${position.y}px`
+            }">
               <!-- PDF Page Rendering -->
-              <canvas 
-                ref="pdfCanvas" 
-                class="shadow-md"
-              ></canvas>
+              <canvas ref="pdfCanvas" class="shadow-md"></canvas>
             </div>
           </div>
         </div>
@@ -199,17 +203,21 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import { 
-  ArrowLeftIcon, 
-  MinusIcon, 
-  PlusIcon, 
-  ChevronLeftIcon, 
+import {
+  ArrowLeftIcon,
+  MinusIcon,
+  PlusIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
   PanelLeftIcon
 } from 'lucide-vue-next';
 
-import { getPdfPreview, getItemInfo } from '@/api/pdfpreview'; 
+import { getPdfPreview, getItemInfo } from '@/api/pdfpreview';
 import { useAuthStore } from '@/store/superuser';
+import { updateItem } from '@/api/item';
+
+
+
 const authStore = useAuthStore()
 
 const props = defineProps({
@@ -239,7 +247,7 @@ const item = ref({
 const scale = ref(1);
 const currentPage = ref(1);
 // const totalPages = ref(8); // Mock total pages
-const totalPages = ref(0); 
+const totalPages = ref(0);
 
 const position = ref({ x: 0, y: 0 });
 const isDragging = ref(false);
@@ -280,6 +288,27 @@ async function fetchItemInfo() {
 }
 
 
+const showEntryModal = ref(false)
+const saveEntry = async () => {
+  console.log('Saving formatted book:', formatBook(itemInfo.value))
+  const response = await updateItem(itemInfo.value.id, formatBook(itemInfo.value), authStore.token)
+
+  if (response.status === 200) {
+    console.log('Book saved successfully:', response)
+    showEntryModal.value = false
+  } else {
+    console.error('Error saving book:', response)
+  }
+  showEntryModal.value = false
+}
+
+const formatBook = (book) => {
+  return {
+    description: book.description,
+    shape: book.shape,
+  }
+}
+
 
 // Create an array of page numbers for iteration
 const pageArray = computed(() => {
@@ -304,7 +333,7 @@ function getCategoryClass(category) {
     '证件': 'bg-cyan-50 text-cyan-700',
     '票据': 'bg-orange-50 text-orange-700'
   };
-  
+
   return categoryColors[category] || 'bg-gray-100 text-gray-800';
 }
 
@@ -347,31 +376,31 @@ function goToPage(pageNumber) {
 async function toggleThumbnails() {
   showThumbnails.value = !showThumbnails.value;
   setTimeout(() => {
-   renderAllThumbnails();
+    renderAllThumbnails();
   }, 100);
 }
 
 // PDF Drag Controls
 function startDrag(event) {
   if (event.button !== 0) return; // Only left mouse button
-  
+
   isDragging.value = true;
   dragStart.value = {
     x: event.clientX - position.value.x,
     y: event.clientY - position.value.y
   };
-  
+
   event.preventDefault();
 }
 
 function onDrag(event) {
   if (!isDragging.value) return;
-  
+
   position.value = {
     x: event.clientX - dragStart.value.x,
     y: event.clientY - dragStart.value.y
   };
-  
+
   event.preventDefault();
 }
 
@@ -430,7 +459,7 @@ async function renderPage(pageNumber) {
 async function renderThumbnail(pageNumber) {
   const canvas = thumbnailCanvases.value[pageNumber - 1];
   if (!canvas) return;
-  
+
   const page = await pdfDoc.getPage(pageNumber);
   const viewport = page.getViewport({ scale: 0.5 });
 
@@ -455,7 +484,7 @@ watch(currentPage, () => {
     const containerWidth = pdfContainer.value.clientWidth;
     const containerHeight = pdfContainer.value.clientHeight;
     const contentWidth = pdfCanvas.value.width;
-    
+
     position.value = {
       x: Math.max(0, (containerWidth - contentWidth * scale.value) / 2),
       y: 0 // Start from the top
@@ -472,26 +501,26 @@ onMounted(async () => {
   await init();
 
   await renderPage(currentPage.value);
-  
+
   // Center the content initially
   if (pdfContainer.value && pdfContent.value && pdfCanvas.value) {
     const containerWidth = pdfContainer.value.clientWidth;
     const containerHeight = pdfContainer.value.clientHeight;
     const contentWidth = pdfCanvas.value.width;
     const contentHeight = pdfCanvas.value.height;
-    
+
     position.value = {
       x: Math.max(0, (containerWidth - contentWidth) / 2),
       y: Math.max(0, (containerHeight - contentHeight) / 2)
     };
   }
-  
+
   // Initialize thumbnails array
   thumbnailCanvases.value = Array(totalPages.value).fill(null);
-  
+
   // Render thumbnails after a short delay to ensure refs are populated
   setTimeout(() => {
-     renderAllThumbnails();
+    renderAllThumbnails();
   }, 100);
 });
 </script>
