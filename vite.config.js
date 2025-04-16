@@ -24,6 +24,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), // 确保 @ 指向 src
     },
   },
+  base: '/admin/',
   // server: {
   //   host: '0.0.0.0', // 允许外部访问
   //   port: 5173, // 确保和 ngrok 端口匹配
