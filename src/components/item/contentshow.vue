@@ -88,7 +88,7 @@
               <tr v-for="book in filteredBooks" :key="book.id" class="hover:bg-gray-50">
                 <td class="px-4 py-2.5 text-gray-900">{{ book.customId }}</td>
                 <td class="px-4 py-2.5">
-                  <img :src="book.coverPath ? `http://localhost:8080/files/${book.coverPath}` : defaultCover" alt="封面图"
+                  <img :src="book.coverPath ? `${FILE_BASE_URL}/${book.coverPath}` : defaultCover" alt="封面图"
                     class="w-14 h-14 object-cover rounded" />
                 </td>
                 <td class="px-4 py-2.5 text-gray-900">{{ book.title }}</td>
@@ -288,7 +288,8 @@ import { getItemByIds, updateItem, getFilteredList, getQueryList, deleteItem } f
 import { getAllHouseholds } from '@/api/household'
 import { useAuthStore } from '@/store/superuser'
 import EntryModal from '@/components/item/entrymodel.vue'
-const defaultCover = '/images/default-cover.png' // 确保你有这个默认图
+const defaultCover = '/admin/images/default-cover.png' // 确保你有这个默认图
+import { FILE_BASE_URL } from '@/api/config'
 
 const authStore = useAuthStore()
 const emit = defineEmits(['startupload'])

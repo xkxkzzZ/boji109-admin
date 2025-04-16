@@ -66,7 +66,7 @@
         <div class="flex flex-col lg:flex-row gap-6">
           <div class="w-full lg:w-1/4 xl:w-1/5">
             <div class="aspect-[3/4] bg-gray-100 rounded-md overflow-hidden">
-              <img :src="itemInfo.coverPath ? `http://localhost:8080/files/${itemInfo.coverPath}` : defaultCover"
+              <img :src="itemInfo.coverPath ? `${FILE_BASE_URL}/${itemInfo.coverPath}` : defaultCover"
                 :alt="itemInfo.title" class="w-full h-full object-cover" />
             </div>
           </div>
@@ -215,7 +215,7 @@ import {
 import { getPdfPreview, getItemInfo } from '@/api/pdfpreview';
 import { useAuthStore } from '@/store/superuser';
 import { updateItem } from '@/api/item';
-
+import { FILE_BASE_URL } from '@/api/config';
 
 
 const authStore = useAuthStore()
@@ -227,7 +227,7 @@ const props = defineProps({
   }
 });
 
-const defaultCover = '/images/default-cover.png' // 自己放到 public 文件夹下
+const defaultCover = '/admin/images/default-cover.png' // 自己放到 public 文件夹下
 
 // Mock item data - would be fetched from API in real app
 const item = ref({
@@ -422,8 +422,6 @@ async function init() {
 
   console.log('pdfjsLib', pdfjsLib)
 
-  // const url = 'http://localhost:8080/api/pdf/preview/3' // 替换成你的后端接口
-  // const response = await fetch(url)
 
   const response = await getPdfPreview(authStore.token, itemId.value)
   // console.log('response', response)
