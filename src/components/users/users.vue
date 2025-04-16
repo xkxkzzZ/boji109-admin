@@ -110,7 +110,7 @@
                       </div>
                     </td>
 
-                    
+
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="text-sm font-medium text-gray-900">{{ user.nickname }}</div>
                       <div class="text-sm text-gray-500">{{ user.email }}</div>
@@ -130,15 +130,13 @@
                           <CirclePlus class="h-4 w-4" />
                         </button>
 
-                        <button @click="openPermissionsModal(user)" class="text-blue-600 hover:text-blue-900">
+                        <button @click="openPermissionModal(user)" class="text-blue-600 hover:text-blue-900">
                           <key class="h-4 w-4" />
                         </button>
                       </div>
                     </td>
                   </tr>
-                  <tr v-for="sub in user.subUsers" :key="sub.id" class="bg-gray-50"
-                  v-if="isExpanded(user.userId)"
-                  >
+                  <tr v-for="sub in user.subUsers" :key="sub.id" class="bg-gray-50" v-if="isExpanded(user.userId)">
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="1">
                       <div class="text-sm text-gray-500">{{ sub.userId }}</div>
                       <div class="text-sm text-gray-500">子用户</div>
@@ -304,11 +302,25 @@
     <div v-if="showPermissionsModal" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
       <!-- 背景遮罩 -->
       <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="closePermissionModal"></div>
-      
+
       <!-- 模态框 -->
       <div
         class="relative w-full max-w-2xl p-6 mx-4 bg-gray-50 rounded-xl shadow-lg animate-fade-in border border-gray-200">
-
+        <!-- 模态框头部 -->
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-medium text-gray-800">
+            {{ userForPermissions.nickname }} 对三个子库的权限管理
+          </h3>
+          <button @click="closePermissionModal"
+            class="p-1.5 rounded-full text-gray-500 hover:bg-gray-100 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-x">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
         <!-- 模态框内容 -->
         <div class="space-y-4">
           <!-- 权限卡片 -->
@@ -410,7 +422,7 @@
         </div>
 
         <!-- 模态框底部 -->
-        <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+        <!-- <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
           <button @click="closePermissionModal"
             class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200 flex items-center gap-1">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -430,7 +442,7 @@
             </svg>
             保存更改
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -510,6 +522,7 @@ import {
 } from 'lucide-vue-next'
 
 import { getUsersWithSubs, assignSubUser, deleteSubUser } from '@/api/admin';
+import { grantCategory, checkAllCategories, revokeCategory } from '@/api/permission';
 import { useAuthStore } from '@/store/superuser';
 const authStore = useAuthStore();
 
@@ -554,6 +567,61 @@ const deletesubuser = async (userId) => {
   }
 }
 
+const grantcategory = async (userid, categoryname, expiresat) => {
+  console.log('Granting category:', categoryname, 'to user with ID:', userid);
+  const response = await grantCategory(authStore.token, {
+    userId: userid,
+    categoryName: categoryname,
+    expiresAt: expiresat
+  });
+  if (response.status === 200) {
+    // console.log('Category granted successfully:', response);
+    // alert(response.data.message);
+    
+  } else {
+    alert(response.data.message);
+    console.error('Failed to grant category:');
+  }
+}
+
+const fetchPermissions  = async (userid) => {
+  console.log('Checking all categories for user with ID:', userid);
+  const response = await checkAllCategories(authStore.token, userid);
+  if (response.status === 200) {
+    // console.log('Checked all categories successfully:', response.data);
+    // alert(response.data.message);
+    // return response.data.data;
+    // 格式化数据为组件使用的格式
+      permissions.value = Object.entries(response.data.data).map(([key, value]) => ({
+          name: key,  
+          hasAccess: value.hasAccess,
+          // expiresAt: value.expiresAt.split('T')[0] || ''
+          expiresAt: value.expiresAt ? value.expiresAt.split('T')[0] : ''
+      }));
+      console.log('Permissions:', permissions.value);
+  } else {
+    alert(response.data.message);
+    console.error('Failed to check all categories:');
+  }
+
+  
+}
+
+const revokecategory = async (userId, categoryName) => {
+  console.log('Revoking category:', categoryName, 'from user with ID:', userId);
+  const response = await revokeCategory(authStore.token, 
+    userId,
+    categoryName
+  );
+  if (response.status === 200) {
+    console.log('Category revoked successfully:', response.data);
+    // alert(response.data.message);
+  } else {
+    alert(response.data.message);
+    console.error('Failed to revoke category:');
+  }
+}
+
 // Active tab state
 const activeTab = ref('users')
 const userMenuOpen = ref(false)
@@ -587,11 +655,6 @@ function toggleSubUsers(userId) {
 function isExpanded(userId) {
   return expandedUsers.value.includes(userId)
 }
-
-// Permissions management state
-const showPermissionsModal = ref(false)
-const userForPermissions = ref(null)
-const selectedPermissions = ref([])
 
 
 // Delete confirmation state
@@ -632,11 +695,6 @@ const filteredUsers = computed(() => {
 })
 
 
-const openPermissionsModal = (user) => {
-  userForPermissions.value = user
-  // selectedPermissions.value = [...user.permissions]
-  showPermissionsModal.value = true
-}
 
 
 const confirmDeleteUser = (user) => {
@@ -661,30 +719,24 @@ const confirmDelete = () => {
 }
 
 
+// Permissions management state
+const showPermissionsModal = ref(false)
+const userForPermissions = ref(null)
+
 
 // 权限数据
-const permissions = ref([
-  {
-    name: '散叶库',
-    hasAccess: true,
-    expiresAt: '2025-12-31'
-  },
-  {
-    name: '另册库',
-    hasAccess: false,
-    expiresAt: ''
-  },
-  {
-    name: '归户库',
-    hasAccess: true,
-    expiresAt: '2024-06-30'
-  }
-]);
+const permissions = ref([]);
+
+
 
 // 打开模态框
-const openPermissionModal = () => {
-  showPermissionsModal.value = true;
-};
+const openPermissionModal = async (user) => {
+  await fetchPermissions(user.id);
+  
+  userForPermissions.value = user
+  // selectedPermissions.value = [...user.permissions]
+  showPermissionsModal.value = true
+}
 
 // 关闭模态框
 const closePermissionModal = () => {
@@ -692,27 +744,52 @@ const closePermissionModal = () => {
 };
 
 // 授予权限
-const grantAccess = (index) => {
-  permissions.value[index].hasAccess = true;
+const grantAccess  = async(index) => {
+  // permissions.value[index].hasAccess = true;
   // 默认授权一年
+  // 预期格式为 yyyy-MM-dd'T'HH:mm:ss，例如 2025-04-15T15:00:00
   const today = new Date();
   const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
-  permissions.value[index].expiresAt = nextYear.toISOString().split('T')[0];
+ 
+  const date = nextYear.toISOString(); // 2026-04-16T15:56:58.648Z
+  const expiresAt = date.split('T')[0] ;
+  
+  // grantcategory
+  await grantcategory(userForPermissions.value.id, permissions.value[index].name, expiresAt+ 'T00:00:00');
+
+  // permissions.value[index].expiresAt = expiresAt;
+  await fetchPermissions(userForPermissions.value.id);
 };
 
-// 撤销权限
-const revokeAccess = (index) => {
-  permissions.value[index].hasAccess = false;
-  permissions.value[index].expiresAt = '';
-};
+
 
 // 延长权限期限
-const extendAccess = (index) => {
+const extendAccess = async (index) => {
   // 延长一年
   const currentExpiry = new Date(permissions.value[index].expiresAt);
   currentExpiry.setFullYear(currentExpiry.getFullYear() + 1);
-  permissions.value[index].expiresAt = currentExpiry.toISOString().split('T')[0];
+  // permissions.value[index].expiresAt = currentExpiry.toISOString().split('T')[0];
+
+  const date = currentExpiry.toISOString(); // 2026-04-16T15:56:58.648Z
+  const expiresAt = date.split('T')[0] ;
+  // grantcategory
+  await grantcategory(userForPermissions.value.id, permissions.value[index].name, expiresAt+ 'T00:00:00');
+
+  await fetchPermissions(userForPermissions.value.id);
 };
+
+// 撤销权限
+const revokeAccess = async (index) => {
+
+ 
+    // revokecategory
+  await  revokecategory(userForPermissions.value.id, permissions.value[index].name);
+  // permissions.value[index].hasAccess = false;
+  // permissions.value[index].expiresAt = '';
+  await fetchPermissions(userForPermissions.value.id);
+
+};
+
 
 // 保存更改
 const saveChanges = () => {
