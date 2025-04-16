@@ -36,3 +36,19 @@ export const assignSubUser = async (token, parentUserId) => {
     return error.response;
   }
 }
+
+
+export const deleteSubUser = async (token, id) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/admin/delete-sub-user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error('Error deleting subscription user:', error);
+    return error.response;
+  }
+}

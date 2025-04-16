@@ -75,24 +75,19 @@
                 <tr>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    用户
+                    ID 类型
                   </th>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    姓名电话
+                    昵称 邮箱
                   </th>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    单位地址
-                  </th>
-
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    子库权限
+                    姓名 电话
                   </th>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    状态
+                    单位 地址
                   </th>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -103,94 +98,66 @@
               <tbody class="bg-white divide-y divide-gray-200">
 
                 <template v-for="user in filteredUsers" :key="user.id">
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900">{{ user.nickname }}</div>
-                        <div class="text-sm text-gray-500">{{ user.email }}</div>
+                  <tr class="">
+                    <td class="px-6 py-4 whitespace-nowrap flex items-center gap-2">
+                      <button @click="toggleSubUsers(user.userId)" class="text-gray-600 hover:text-black">
+                        <ChevronDown v-if="isExpanded(user.userId)" class="h-4 w-4" />
+                        <ChevronRight v-else class="h-4 w-4" />
+                      </button>
+                      <div>
+                        <div class="text-sm text-gray-500">{{ user.userId }}</div>
+                        <div class="text-sm text-gray-500">主用户</div>
                       </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900">{{ user.realName }}</div>
-                        <div class="text-sm text-gray-500">{{ user.phone }}</div>
-                      </div>
-                      <!-- <div class="text-sm text-gray-900">{{ user.realName }}</div> -->
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900">{{ user.company }}</div>
-                        <div class="text-sm text-gray-500">{{ user.address }}</div>
-                      </div>
-                      <!-- <div class="text-sm text-gray-900">{{ user.phone }}</div> -->
                     </td>
 
+                    
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="flex flex-wrap gap-1">
-                        <span v-for="(permission, index) in user.permissions" :key="index"
-                          class="px-2 py-1 text-xs rounded-full bg-emerald-100 text-emerald-800">
-                          {{ permission }}
-                        </span>
-                      </div>
+                      <div class="text-sm font-medium text-gray-900">{{ user.nickname }}</div>
+                      <div class="text-sm text-gray-500">{{ user.email }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" :class="{
-                        'bg-green-100 text-green-800': user.status === '活跃',
-                        'bg-yellow-100 text-yellow-800': user.status === '待审核',
-                        'bg-red-100 text-red-800': user.status === '已禁用'
-                      }">
-                        {{ user.status }}
-                      </span>
+                      <div class="text-sm font-medium text-gray-900">{{ user.realName }}</div>
+                      <div class="text-sm text-gray-500">{{ user.phone }}</div>
                     </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">{{ user.company }}</div>
+                      <div class="text-sm text-gray-500">{{ user.address }}</div>
+                    </td>
+
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div class="flex space-x-2">
                         <button @click="assignsubuser(user.userId)" class="text-emerald-600 hover:text-emerald-900">
                           <CirclePlus class="h-4 w-4" />
                         </button>
-                        <!-- <button @click="openUserModal(user)" class="text-emerald-600 hover:text-emerald-900">
-                          <eye class="h-4 w-4" />
-                        </button>
-                        <button @click="openUserModal(user)" class="text-emerald-600 hover:text-emerald-900">
-                          <edit class="h-4 w-4" />
-                        </button> -->
+
                         <button @click="openPermissionsModal(user)" class="text-blue-600 hover:text-blue-900">
                           <key class="h-4 w-4" />
                         </button>
-                        <button @click="toggleUserStatus(user)" class="text-orange-600 hover:text-orange-900">
-                          <power class="h-4 w-4" />
-                        </button>
-
-                        <!-- <button @click="confirmDeleteUser(user)" class="text-red-600 hover:text-red-900">
-                          <trash-2 class="h-4 w-4" />
-                        </button> -->
                       </div>
                     </td>
                   </tr>
-                  <tr v-for="sub in user.subUsers" :key="sub.id" class="bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap pl-12" colspan="2">
-                      <div class="text-sm font-medium text-gray-900">{{ sub.nickname || '未填写昵称' }}</div>
-                      <div class="text-sm text-gray-500">{{ sub.email || '未填写邮箱' }}</div>
+                  <tr v-for="sub in user.subUsers" :key="sub.id" class="bg-gray-50"
+                  v-if="isExpanded(user.userId)"
+                  >
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="1">
+                      <div class="text-sm text-gray-500">{{ sub.userId }}</div>
+                      <div class="text-sm text-gray-500">子用户</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm font-medium text-gray-900">{{ sub.company || '未填写单位' }}</div>
-                      <div class="text-sm text-gray-500">{{ sub.address || '未填写地址' }}</div>
+                      <div class="text-sm font-medium text-gray-900">{{ sub.nickname || '-' }}</div>
+                      <div class="text-sm text-gray-500">{{ sub.email || '-' }}</div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap italic text-gray-400" colspan="1">
-                      子账号
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">{{ sub.realname }}</div>
+                      <div class="text-sm text-gray-500">{{ sub.phone }}</div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" colspan="1">
-                      <div class="text-sm text-gray-500">
-                        <span>ID: {{ sub.userId }}</span>
-                      </div>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">{{ sub.company }}</div>
+                      <div class="text-sm text-gray-500">{{ sub.address }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div class="flex space-x-2">
-
-                        <button @click="" class="text-blue-600 hover:text-blue-900">
-                          <key class="h-4 w-4" />
-                        </button>
-
-                        <button @click="" class="text-red-600 hover:text-red-900">
+                        <button @click="deletesubuser(sub.id)" class="text-red-600 hover:text-red-900">
                           <trash-2 class="h-4 w-4" />
                         </button>
                       </div>
@@ -335,6 +302,9 @@
 
     <!-- Permissions Modal -->
     <div v-if="showPermissionsModal" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+      <!-- 背景遮罩 -->
+      <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="closePermissionModal"></div>
+      
       <!-- 模态框 -->
       <div
         class="relative w-full max-w-2xl p-6 mx-4 bg-gray-50 rounded-xl shadow-lg animate-fade-in border border-gray-200">
@@ -396,7 +366,7 @@
                       <path d="M8 2v4"></path>
                       <path d="M3 10h18"></path>
                     </svg>
-                    到期时间: {{ permission.expiryDate }}
+                    到期时间: {{ permission.expiresAt }}
                   </span>
                 </div>
               </div>
@@ -539,7 +509,7 @@ import {
   CirclePlus,
 } from 'lucide-vue-next'
 
-import { getUsersWithSubs, assignSubUser } from '@/api/admin';
+import { getUsersWithSubs, assignSubUser, deleteSubUser } from '@/api/admin';
 import { useAuthStore } from '@/store/superuser';
 const authStore = useAuthStore();
 
@@ -563,11 +533,24 @@ const assignsubuser = async (userId) => {
   const response = await assignSubUser(authStore.token, userId);
   if (response.status === 200) {
     // console.log('Sub-user assigned successfully:', response.data);
-    alert(response.data.mesgreen);
+    alert(response.data.message);
     fetchuserswithsubs();
   } else {
-    alert(response.data.mesgreen);
+    alert(response.data.message);
     console.error('Failed to assign sub-user:');
+  }
+}
+
+const deletesubuser = async (userId) => {
+  console.log('Deleting sub-user with ID:', userId);
+  const response = await deleteSubUser(authStore.token, userId);
+  if (response.status === 200) {
+    // console.log('Sub-user deleted successfully:', response.data);
+    alert(response.data.message);
+    fetchuserswithsubs();
+  } else {
+    alert(response.data.message);
+    console.error('Failed to delete sub-user:');
   }
 }
 
@@ -590,6 +573,21 @@ const editingUser = ref({
   permissions: []
 })
 
+const expandedUsers = ref([])
+
+function toggleSubUsers(userId) {
+  const index = expandedUsers.value.indexOf(userId)
+  if (index > -1) {
+    expandedUsers.value.splice(index, 1)
+  } else {
+    expandedUsers.value.push(userId)
+  }
+}
+
+function isExpanded(userId) {
+  return expandedUsers.value.includes(userId)
+}
+
 // Permissions management state
 const showPermissionsModal = ref(false)
 const userForPermissions = ref(null)
@@ -602,54 +600,6 @@ const deleteType = ref('')
 const orgToDelete = ref(null)
 const userToDelete = ref(null)
 
-// Sample data - Users
-// const users = ref([
-//   {
-//     id: 1,
-//     name: '李明',
-//     email: 'liming@nlc.cn',
-//     organization: '国家图书馆',
-//     role: '管理员',
-//     status: '活跃',
-//     permissions: ['经部古籍库', '史部古籍库', '子部古籍库', '集部古籍库', '丛部古籍库']
-//   },
-//   {
-//     id: 2,
-//     name: '王芳',
-//     email: 'wangfang@pku.edu.cn',
-//     organization: '北京大学',
-//     role: '编辑员',
-//     status: '活跃',
-//     permissions: ['经部古籍库', '史部古籍库']
-//   },
-//   {
-//     id: 3,
-//     name: '张伟',
-//     email: 'zhangwei@cass.org.cn',
-//     organization: '中国社会科学院',
-//     role: '查阅员',
-//     status: '活跃',
-//     permissions: ['史部古籍库', '地方志库']
-//   },
-//   {
-//     id: 4,
-//     name: '刘洋',
-//     email: 'liuyang@pma.gov.cn',
-//     organization: '故宫博物院',
-//     role: '普通用户',
-//     status: '待审核',
-//     permissions: ['善本特藏库']
-//   },
-//   {
-//     id: 5,
-//     name: '赵静',
-//     email: 'zhaojing@shl.org.cn',
-//     organization: '上海图书馆',
-//     role: '编辑员',
-//     status: '已禁用',
-//     permissions: ['碑帖库', '年谱库']
-//   }
-// ])
 
 const users = ref([]);
 
@@ -659,18 +609,21 @@ const users = ref([]);
 const filteredUsers = computed(() => {
   return users.value.filter(user => {
     // Search filter
-    if (userSearchQuery.value && !user.name.includes(userSearchQuery.value) &&
-      !user.email.includes(userSearchQuery.value)) {
-      return false
-    }
+    if (userSearchQuery.value &&
+      !(user.nickname && user.nickname.includes(userSearchQuery.value)) &&
+      !(user.email && user.email.includes(userSearchQuery.value)) &&
+      !(user.userId && user.userId.includes(userSearchQuery.value)) &&
+      !(user.realname && user.realname.includes(userSearchQuery.value)) &&
+      !(user.company && user.company.includes(userSearchQuery.value)) &&
 
-    // Organization filter
-    if (userOrgFilter.value && user.organization !== userOrgFilter.value) {
-      return false
-    }
-
-    // Role filter
-    if (userRoleFilter.value && user.role !== userRoleFilter.value) {
+      !(user.subUsers && user.subUsers.some(sub => {
+        return (sub.userId && sub.userId.includes(userSearchQuery.value)) ||
+          (sub.nickname && sub.nickname.includes(userSearchQuery.value)) ||
+          (sub.realname && sub.realname.includes(userSearchQuery.value)) ||
+          (sub.email && sub.email.includes(userSearchQuery.value)) ||
+          (sub.company && sub.company.includes(userSearchQuery.value))
+      }))
+    ) {
       return false
     }
 
@@ -678,44 +631,6 @@ const filteredUsers = computed(() => {
   })
 })
 
-// User functions
-const openUserModal = (user) => {
-  currentUser.value = user
-  if (user) {
-    // Edit existing user
-    editingUser.value = { ...user }
-  } else {
-    // Create new user
-    editingUser.value = {
-      name: '',
-      email: '',
-      organization: organizations.value.length > 0 ? organizations.value[0].name : '',
-      role: '普通用户',
-      status: '活跃',
-      permissions: []
-    }
-  }
-  showUserModal.value = true
-}
-
-const saveUser = () => {
-  if (currentUser.value) {
-    // Update existing user
-    const index = users.value.findIndex(u => u.id === currentUser.value.id)
-    if (index !== -1) {
-      users.value[index] = { ...editingUser.value }
-    }
-  } else {
-    // Add new user
-    const newId = Math.max(...users.value.map(u => u.id)) + 1
-    users.value.push({
-      id: newId,
-      ...editingUser.value
-    })
-  }
-
-  showUserModal.value = false
-}
 
 const openPermissionsModal = (user) => {
   userForPermissions.value = user
@@ -723,27 +638,6 @@ const openPermissionsModal = (user) => {
   showPermissionsModal.value = true
 }
 
-const savePermissions = () => {
-  if (userForPermissions.value) {
-    const index = users.value.findIndex(u => u.id === userForPermissions.value.id)
-    if (index !== -1) {
-      users.value[index].permissions = [...selectedPermissions.value]
-    }
-  }
-  showPermissionsModal.value = false
-}
-
-const toggleUserStatus = (user) => {
-  const index = users.value.findIndex(u => u.id === user.id)
-  if (index !== -1) {
-    const statusMap = {
-      '活跃': '已禁用',
-      '已禁用': '活跃',
-      '待审核': '活跃'
-    }
-    users.value[index].status = statusMap[user.status]
-  }
-}
 
 const confirmDeleteUser = (user) => {
   userToDelete.value = user
@@ -773,17 +667,17 @@ const permissions = ref([
   {
     name: '散叶库',
     hasAccess: true,
-    expiryDate: '2025-12-31'
+    expiresAt: '2025-12-31'
   },
   {
     name: '另册库',
     hasAccess: false,
-    expiryDate: ''
+    expiresAt: ''
   },
   {
     name: '归户库',
     hasAccess: true,
-    expiryDate: '2024-06-30'
+    expiresAt: '2024-06-30'
   }
 ]);
 
@@ -803,21 +697,21 @@ const grantAccess = (index) => {
   // 默认授权一年
   const today = new Date();
   const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
-  permissions.value[index].expiryDate = nextYear.toISOString().split('T')[0];
+  permissions.value[index].expiresAt = nextYear.toISOString().split('T')[0];
 };
 
 // 撤销权限
 const revokeAccess = (index) => {
   permissions.value[index].hasAccess = false;
-  permissions.value[index].expiryDate = '';
+  permissions.value[index].expiresAt = '';
 };
 
 // 延长权限期限
 const extendAccess = (index) => {
   // 延长一年
-  const currentExpiry = new Date(permissions.value[index].expiryDate);
+  const currentExpiry = new Date(permissions.value[index].expiresAt);
   currentExpiry.setFullYear(currentExpiry.getFullYear() + 1);
-  permissions.value[index].expiryDate = currentExpiry.toISOString().split('T')[0];
+  permissions.value[index].expiresAt = currentExpiry.toISOString().split('T')[0];
 };
 
 // 保存更改
