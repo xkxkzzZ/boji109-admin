@@ -44,7 +44,7 @@
               <input type="text" placeholder="搜索用户" v-model="userSearchQuery"
                 class="pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50 text-sm" />
             </div>
-            <select v-model="userOrgFilter"
+            <!-- <select v-model="userOrgFilter"
               class="pl-3 pr-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50 text-sm">
               <option value="">全部机构</option>
               <option v-for="org in organizations" :key="org.id" :value="org.name">
@@ -58,13 +58,13 @@
               <option value="编辑员">编辑员</option>
               <option value="查阅员">查阅员</option>
               <option value="普通用户">普通用户</option>
-            </select>
+            </select> -->
           </div>
-          <button @click="openUserModal(null)"
+          <!-- <button @click="openUserModal(null)"
             class="flex items-center py-2 px-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 text-sm">
             <plus class="w-4 h-4 mr-1" />
             <span>添加用户</span>
-          </button>
+          </button> -->
         </div>
 
         <!-- Users Table -->
@@ -159,6 +159,7 @@
                         <button @click="toggleUserStatus(user)" class="text-orange-600 hover:text-orange-900">
                           <power class="h-4 w-4" />
                         </button>
+
                         <!-- <button @click="confirmDeleteUser(user)" class="text-red-600 hover:text-red-900">
                           <trash-2 class="h-4 w-4" />
                         </button> -->
@@ -194,7 +195,7 @@
                         </button>
                       </div>
                     </td>
-                    
+
                   </tr>
                 </template>
 
@@ -210,7 +211,7 @@
                 <p class="text-sm text-gray-700">
                   显示 <span class="font-medium">1</span> 至 <span class="font-medium">10</span> 条，共 <span
                     class="font-medium">{{
-                    users.length }}</span> 条
+                      users.length }}</span> 条
                 </p>
               </div>
               <div>
@@ -242,250 +243,12 @@
 
       <!-- Access Logs Tab -->
       <div v-if="activeTab === 'access-logs'">
-        <!-- Filter Bar -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <!-- User Search -->
-            <div>
-              <label for="log-user-search" class="block text-sm font-medium text-gray-700 mb-1">用户</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <search class="h-4 w-4 text-gray-400" />
-                </div>
-                <input id="log-user-search" type="text" placeholder="搜索用户" v-model="logUserSearch"
-                  class="pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50 text-sm w-full" />
-              </div>
-            </div>
-
-            <!-- Date Range -->
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-1">日期范围</label>
-              <div class="flex items-center space-x-2">
-                <div class="relative flex-1">
-                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <calendar class="h-4 w-4 text-gray-400" />
-                  </div>
-                  <input type="date" v-model="logDateStart"
-                    class="pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50 text-sm w-full" />
-                </div>
-                <span class="text-gray-500">至</span>
-                <div class="relative flex-1">
-                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <calendar class="h-4 w-4 text-gray-400" />
-                  </div>
-                  <input type="date" v-model="logDateEnd"
-                    class="pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50 text-sm w-full" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Action Type -->
-            <div>
-              <label for="log-action-type" class="block text-sm font-medium text-gray-700 mb-1">操作类型</label>
-              <select id="log-action-type" v-model="logActionType"
-                class="pl-3 pr-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50 text-sm w-full">
-                <option value="">全部操作</option>
-                <option value="登录">登录</option>
-                <option value="查看">查看</option>
-                <option value="下载">下载</option>
-                <option value="编辑">编辑</option>
-                <option value="上传">上传</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="flex justify-between mt-4 pt-4 border-t border-gray-100">
-            <button @click="resetLogFilters" class="text-gray-500 hover:text-gray-700 text-sm flex items-center">
-              <refresh-cw class="w-4 h-4 mr-1" />
-              重置筛选
-            </button>
-
-            <button @click="applyLogFilters"
-              class="flex items-center py-1.5 px-3 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
-              <filter class="w-4 h-4 mr-1" />
-              <span>应用筛选</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Access Logs Table -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    用户
-                  </th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    所属机构
-                  </th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    操作类型
-                  </th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    资源
-                  </th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    IP地址
-                  </th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    时间
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="log in filteredLogs" :key="log.id" class="hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                      <div class="h-10 w-10 flex-shrink-0 bg-emerald-100 rounded-full flex items-center justify-center">
-                        <user class="h-5 w-5 text-emerald-600" />
-                      </div>
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900">{{ log.userName }}</div>
-                        <div class="text-sm text-gray-500">{{ log.userEmail }}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">{{ log.organization }}</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" :class="{
-                      'bg-blue-100 text-blue-800': log.actionType === '登录',
-                      'bg-green-100 text-green-800': log.actionType === '查看',
-                      'bg-purple-100 text-purple-800': log.actionType === '下载',
-                      'bg-yellow-100 text-yellow-800': log.actionType === '编辑',
-                      'bg-emerald-100 text-emerald-800': log.actionType === '上传'
-                    }">
-                      {{ log.actionType }}
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">{{ log.resource }}</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-500">{{ log.ipAddress }}</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-500">{{ log.timestamp }}</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Pagination -->
-          <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-              <div>
-                <p class="text-sm text-gray-700">
-                  显示 <span class="font-medium">1</span> 至 <span class="font-medium">10</span> 条，共 <span
-                    class="font-medium">{{
-                    accessLogs.length }}</span> 条
-                </p>
-              </div>
-              <div>
-                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                  <a href="#"
-                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                    <span class="sr-only">上一页</span>
-                    <chevron-left class="h-5 w-5" />
-                  </a>
-                  <a href="#"
-                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-emerald-50 text-sm font-medium text-emerald-600 hover:bg-emerald-100">
-                    1
-                  </a>
-                  <a href="#"
-                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                    2
-                  </a>
-                  <a href="#"
-                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                    <span class="sr-only">下一页</span>
-                    <chevron-right class="h-5 w-5" />
-                  </a>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Recordings />
       </div>
     </main>
 
     <!-- Organization Modal -->
-    <div v-if="showOrgModal" class="fixed inset-0 overflow-y-auto z-50">
-      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
 
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                  {{ currentOrg ? '编辑机构' : '添加机构' }}
-                </h3>
-                <div class="mt-4 space-y-4">
-                  <!-- Organization Name -->
-                  <div>
-                    <label for="org-name" class="block text-sm font-medium text-gray-700">机构名称</label>
-                    <input type="text" id="org-name" v-model="editingOrg.name"
-                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                  </div>
-
-                  <!-- Organization Code -->
-                  <div>
-                    <label for="org-code" class="block text-sm font-medium text-gray-700">机构代码</label>
-                    <input type="text" id="org-code" v-model="editingOrg.code"
-                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                  </div>
-
-                  <!-- Organization Type -->
-                  <div>
-                    <label for="org-type" class="block text-sm font-medium text-gray-700">机构类型</label>
-                    <select id="org-type" v-model="editingOrg.type"
-                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm">
-                      <option value="教育机构">教育机构</option>
-                      <option value="研究机构">研究机构</option>
-                      <option value="政府机构">政府机构</option>
-                      <option value="图书馆">图书馆</option>
-                    </select>
-                  </div>
-
-                  <!-- Concurrent Access Limit -->
-                  <div>
-                    <label for="concurrent-limit" class="block text-sm font-medium text-gray-700">同时访问人数限制</label>
-                    <input type="number" id="concurrent-limit" v-model="editingOrg.concurrentLimit" min="1"
-                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button type="button" @click="saveOrg"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:ml-3 sm:w-auto sm:text-sm">
-              保存
-            </button>
-            <button type="button" @click="showOrgModal = false"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-              取消
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- User Modal -->
     <div v-if="showUserModal" class="fixed inset-0 overflow-y-auto z-50">
@@ -571,51 +334,132 @@
     </div>
 
     <!-- Permissions Modal -->
-    <div v-if="showPermissionsModal" class="fixed inset-0 overflow-y-auto z-50">
-      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
+    <div v-if="showPermissionsModal" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+      <!-- 模态框 -->
+      <div
+        class="relative w-full max-w-2xl p-6 mx-4 bg-gray-50 rounded-xl shadow-lg animate-fade-in border border-gray-200">
 
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                  管理子库权限 - {{ userForPermissions?.name }}
-                </h3>
-                <div class="mt-4">
-                  <p class="text-sm text-gray-500 mb-4">
-                    为该用户分配可访问的子库权限
-                  </p>
-
-                  <div class="space-y-2 max-h-60 overflow-y-auto">
-                    <div v-for="(permission, index) in availablePermissions" :key="index" class="flex items-center">
-                      <input :id="`permission-${index}`" type="checkbox" :value="permission"
-                        v-model="selectedPermissions"
-                        class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded" />
-                      <label :for="`permission-${index}`" class="ml-3 block text-sm font-medium text-gray-700">
-                        {{ permission }}
-                      </label>
-                    </div>
-                  </div>
+        <!-- 模态框内容 -->
+        <div class="space-y-4">
+          <!-- 权限卡片 -->
+          <div v-for="(permission, index) in permissions" :key="index"
+            class="p-4 border border-gray-200 rounded-lg bg-gray-100/50 hover:bg-gray-100 transition-colors">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="space-y-1">
+                <h4 class="font-medium text-gray-700 flex items-center gap-2">
+                  <svg v-if="permission.name === '散叶库'" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="text-gray-500">
+                    <path d="M16 6H3"></path>
+                    <path d="M16 12H3"></path>
+                    <path d="M16 18H3"></path>
+                    <path d="M21 6v12"></path>
+                  </svg>
+                  <svg v-if="permission.name === '另册库'" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="text-gray-500">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                  </svg>
+                  <svg v-if="permission.name === '归户库'" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="text-gray-500">
+                    <path d="M16 20h4a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4"></path>
+                    <path d="M12 4H8a2 2 0 0 0-2 2v16"></path>
+                    <path d="M12 16h-2a2 2 0 1 1 0-4h2"></path>
+                    <path d="M12 12V4"></path>
+                    <path d="M12 12v8"></path>
+                  </svg>
+                  {{ permission.name }}
+                </h4>
+                <div class="flex items-center gap-2">
+                  <span :class="[
+                    'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium gap-1',
+                    permission.hasAccess ? 'bg-green-100 text-green-700' : 'bg-red-50 text-red-600'
+                  ]">
+                    <svg v-if="permission.hasAccess" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    {{ permission.hasAccess ? '已授权' : '未授权' }}
+                  </span>
+                  <span v-if="permission.hasAccess" class="text-sm text-gray-500 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1.5"></path>
+                      <path d="M16 2v4"></path>
+                      <path d="M8 2v4"></path>
+                      <path d="M3 10h18"></path>
+                    </svg>
+                    到期时间: {{ permission.expiryDate }}
+                  </span>
                 </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button v-if="!permission.hasAccess" @click="grantAccess(index)"
+                  class="px-3 py-1.5 text-sm font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors border border-green-200 flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                  </svg>
+                  授予权限
+                </button>
+                <button v-else @click="revokeAccess(index)"
+                  class="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors border border-red-100 flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
+                    <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
+                    <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
+                    <path
+                      d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15">
+                    </path>
+                  </svg>
+                  禁用权限
+                </button>
+                <button v-if="permission.hasAccess" @click="extendAccess(index)"
+                  class="px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors border border-gray-300 flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1.5"></path>
+                    <path d="M16 2v4"></path>
+                    <path d="M8 2v4"></path>
+                    <path d="M3 10h18"></path>
+                  </svg>
+                  延长期限
+                </button>
               </div>
             </div>
           </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button type="button" @click="savePermissions"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:ml-3 sm:w-auto sm:text-sm">
-              保存
-            </button>
-            <button type="button" @click="showPermissionsModal = false"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-              取消
-            </button>
-          </div>
+        </div>
+
+        <!-- 模态框底部 -->
+        <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+          <button @click="closePermissionModal"
+            class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200 flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+            取消
+          </button>
+          <button @click="saveChanges"
+            class="px-4 py-2 text-sm font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors border border-green-200 flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            保存更改
+          </button>
         </div>
       </div>
     </div>
@@ -699,6 +543,8 @@ import { getUsersWithSubs, assignSubUser } from '@/api/admin';
 import { useAuthStore } from '@/store/superuser';
 const authStore = useAuthStore();
 
+import Recordings from '@/components/users/recordings.vue';
+
 onMounted(async () => {
   fetchuserswithsubs();
 })
@@ -717,10 +563,10 @@ const assignsubuser = async (userId) => {
   const response = await assignSubUser(authStore.token, userId);
   if (response.status === 200) {
     // console.log('Sub-user assigned successfully:', response.data);
-    alert(response.data.message);
+    alert(response.data.mesgreen);
     fetchuserswithsubs();
   } else {
-    alert(response.data.message);
+    alert(response.data.mesgreen);
     console.error('Failed to assign sub-user:');
   }
 }
@@ -728,20 +574,6 @@ const assignsubuser = async (userId) => {
 // Active tab state
 const activeTab = ref('users')
 const userMenuOpen = ref(false)
-
-// Organization management state
-const orgSearchQuery = ref('')
-const orgTypeFilter = ref('')
-const showOrgModal = ref(false)
-const currentOrg = ref(null)
-const editingOrg = ref({
-  name: '',
-  code: '',
-  type: '教育机构',
-  userCount: 0,
-  concurrentLimit: 10,
-  createdAt: ''
-})
 
 // User management state
 const userSearchQuery = ref('')
@@ -762,80 +594,13 @@ const editingUser = ref({
 const showPermissionsModal = ref(false)
 const userForPermissions = ref(null)
 const selectedPermissions = ref([])
-const availablePermissions = [
-  '经部古籍库',
-  '史部古籍库',
-  '子部古籍库',
-  '集部古籍库',
-  '丛部古籍库',
-  '善本特藏库',
-  '地方志库',
-  '碑帖库',
-  '年谱库',
-  '家谱库',
-  '方志库'
-]
 
-// Access logs state
-const logUserSearch = ref('')
-const logDateStart = ref('')
-const logDateEnd = ref('')
-const logActionType = ref('')
 
 // Delete confirmation state
 const showDeleteModal = ref(false)
 const deleteType = ref('')
 const orgToDelete = ref(null)
 const userToDelete = ref(null)
-
-// Sample data - Organizations
-const organizations = ref([
-  {
-    id: 1,
-    name: '国家图书馆',
-    code: 'NLC001',
-    type: '图书馆',
-    userCount: 45,
-    concurrentLimit: 100,
-    createdAt: '2023-01-15'
-  },
-  {
-    id: 2,
-    name: '北京大学',
-    code: 'PKU002',
-    type: '教育机构',
-    userCount: 28,
-    concurrentLimit: 50,
-    createdAt: '2023-02-20'
-  },
-  {
-    id: 3,
-    name: '中国社会科学院',
-    code: 'CASS003',
-    type: '研究机构',
-    userCount: 32,
-    concurrentLimit: 40,
-    createdAt: '2023-03-05'
-  },
-  {
-    id: 4,
-    name: '故宫博物院',
-    code: 'PMA004',
-    type: '政府机构',
-    userCount: 18,
-    concurrentLimit: 30,
-    createdAt: '2023-04-12'
-  },
-  {
-    id: 5,
-    name: '上海图书馆',
-    code: 'SHL005',
-    type: '图书馆',
-    userCount: 25,
-    concurrentLimit: 60,
-    createdAt: '2023-05-18'
-  }
-])
 
 // Sample data - Users
 // const users = ref([
@@ -890,108 +655,6 @@ const users = ref([]);
 
 
 
-// Sample data - Access Logs
-const accessLogs = ref([
-  {
-    id: 1,
-    userName: '李明',
-    userEmail: 'liming@nlc.cn',
-    organization: '国家图书馆',
-    actionType: '登录',
-    resource: '系统',
-    ipAddress: '192.168.1.101',
-    timestamp: '2024-03-14 09:15:22'
-  },
-  {
-    id: 2,
-    userName: '王芳',
-    userEmail: 'wangfang@pku.edu.cn',
-    organization: '北京大学',
-    actionType: '查看',
-    resource: '《资治通鉴》',
-    ipAddress: '192.168.2.45',
-    timestamp: '2024-03-14 10:23:15'
-  },
-  {
-    id: 3,
-    userName: '张伟',
-    userEmail: 'zhangwei@cass.org.cn',
-    organization: '中国社会科学院',
-    actionType: '下载',
-    resource: '《史记》',
-    ipAddress: '192.168.3.78',
-    timestamp: '2024-03-14 11:05:47'
-  },
-  {
-    id: 4,
-    userName: '李明',
-    userEmail: 'liming@nlc.cn',
-    organization: '国家图书馆',
-    actionType: '编辑',
-    resource: '《论语》',
-    ipAddress: '192.168.1.101',
-    timestamp: '2024-03-14 13:42:31'
-  },
-  {
-    id: 5,
-    userName: '刘洋',
-    userEmail: 'liuyang@pma.gov.cn',
-    organization: '故宫博物院',
-    actionType: '查看',
-    resource: '《道德经》',
-    ipAddress: '192.168.4.56',
-    timestamp: '2024-03-14 14:18:09'
-  },
-  {
-    id: 6,
-    userName: '赵静',
-    userEmail: 'zhaojing@shl.org.cn',
-    organization: '上海图书馆',
-    actionType: '上传',
-    resource: '《唐诗三百首》',
-    ipAddress: '192.168.5.92',
-    timestamp: '2024-03-14 15:30:45'
-  },
-  {
-    id: 7,
-    userName: '王芳',
-    userEmail: 'wangfang@pku.edu.cn',
-    organization: '北京大学',
-    actionType: '下载',
-    resource: '《红楼梦》',
-    ipAddress: '192.168.2.45',
-    timestamp: '2024-03-14 16:12:33'
-  },
-  {
-    id: 8,
-    userName: '张伟',
-    userEmail: 'zhangwei@cass.org.cn',
-    organization: '中国社会科学院',
-    actionType: '登录',
-    resource: '系统',
-    ipAddress: '192.168.3.78',
-    timestamp: '2024-03-14 16:45:19'
-  }
-])
-
-// Computed filtered organizations
-const filteredOrganizations = computed(() => {
-  return organizations.value.filter(org => {
-    // Search filter
-    if (orgSearchQuery.value && !org.name.includes(orgSearchQuery.value) &&
-      !org.code.includes(orgSearchQuery.value)) {
-      return false
-    }
-
-    // Type filter
-    if (orgTypeFilter.value && org.type !== orgTypeFilter.value) {
-      return false
-    }
-
-    return true
-  })
-})
-
 // Computed filtered users
 const filteredUsers = computed(() => {
   return users.value.filter(user => {
@@ -1014,91 +677,6 @@ const filteredUsers = computed(() => {
     return true
   })
 })
-
-// Computed filtered logs
-const filteredLogs = computed(() => {
-  return accessLogs.value.filter(log => {
-    // User search filter
-    if (logUserSearch.value && !log.userName.includes(logUserSearch.value) &&
-      !log.userEmail.includes(logUserSearch.value)) {
-      return false
-    }
-
-    // Date range filter
-    if (logDateStart.value) {
-      const startDate = new Date(logDateStart.value)
-      const logDate = new Date(log.timestamp.split(' ')[0])
-      if (logDate < startDate) {
-        return false
-      }
-    }
-
-    if (logDateEnd.value) {
-      const endDate = new Date(logDateEnd.value)
-      const logDate = new Date(log.timestamp.split(' ')[0])
-      if (logDate > endDate) {
-        return false
-      }
-    }
-
-    // Action type filter
-    if (logActionType.value && log.actionType !== logActionType.value) {
-      return false
-    }
-
-    return true
-  })
-})
-
-// Organization functions
-const openOrgModal = (org) => {
-  currentOrg.value = org
-  if (org) {
-    // Edit existing organization
-    editingOrg.value = { ...org }
-  } else {
-    // Create new organization
-    editingOrg.value = {
-      name: '',
-      code: '',
-      type: '教育机构',
-      userCount: 0,
-      concurrentLimit: 10,
-      createdAt: new Date().toISOString().split('T')[0]
-    }
-  }
-  showOrgModal.value = true
-}
-
-const saveOrg = () => {
-  if (currentOrg.value) {
-    // Update existing organization
-    const index = organizations.value.findIndex(o => o.id === currentOrg.value.id)
-    if (index !== -1) {
-      organizations.value[index] = { ...editingOrg.value }
-    }
-  } else {
-    // Add new organization
-    const newId = Math.max(...organizations.value.map(o => o.id)) + 1
-    organizations.value.push({
-      id: newId,
-      ...editingOrg.value
-    })
-  }
-
-  showOrgModal.value = false
-}
-
-const viewOrgUsers = (org) => {
-  userOrgFilter.value = org.name
-  activeTab.value = 'users'
-}
-
-const confirmDeleteOrg = (org) => {
-  orgToDelete.value = org
-  deleteType.value = 'org'
-  showDeleteModal.value = true
-}
 
 // User functions
 const openUserModal = (user) => {
@@ -1141,7 +719,7 @@ const saveUser = () => {
 
 const openPermissionsModal = (user) => {
   userForPermissions.value = user
-  selectedPermissions.value = [...user.permissions]
+  // selectedPermissions.value = [...user.permissions]
   showPermissionsModal.value = true
 }
 
@@ -1188,17 +766,64 @@ const confirmDelete = () => {
   showDeleteModal.value = false
 }
 
-// Log filter functions
-const resetLogFilters = () => {
-  logUserSearch.value = ''
-  logDateStart.value = ''
-  logDateEnd.value = ''
-  logActionType.value = ''
-}
 
-const applyLogFilters = () => {
-  // This function is just for UI feedback
-  // The filtering is already handled by the computed property
-  console.log('Log filters applied')
-}
+
+// 权限数据
+const permissions = ref([
+  {
+    name: '散叶库',
+    hasAccess: true,
+    expiryDate: '2025-12-31'
+  },
+  {
+    name: '另册库',
+    hasAccess: false,
+    expiryDate: ''
+  },
+  {
+    name: '归户库',
+    hasAccess: true,
+    expiryDate: '2024-06-30'
+  }
+]);
+
+// 打开模态框
+const openPermissionModal = () => {
+  showPermissionsModal.value = true;
+};
+
+// 关闭模态框
+const closePermissionModal = () => {
+  showPermissionsModal.value = false;
+};
+
+// 授予权限
+const grantAccess = (index) => {
+  permissions.value[index].hasAccess = true;
+  // 默认授权一年
+  const today = new Date();
+  const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
+  permissions.value[index].expiryDate = nextYear.toISOString().split('T')[0];
+};
+
+// 撤销权限
+const revokeAccess = (index) => {
+  permissions.value[index].hasAccess = false;
+  permissions.value[index].expiryDate = '';
+};
+
+// 延长权限期限
+const extendAccess = (index) => {
+  // 延长一年
+  const currentExpiry = new Date(permissions.value[index].expiryDate);
+  currentExpiry.setFullYear(currentExpiry.getFullYear() + 1);
+  permissions.value[index].expiryDate = currentExpiry.toISOString().split('T')[0];
+};
+
+// 保存更改
+const saveChanges = () => {
+  console.log('权限已更新:', permissions.value);
+  // 在这里处理权限更新逻辑，例如发送到后端API
+  closePermissionModal();
+};
 </script>
