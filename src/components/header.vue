@@ -35,8 +35,6 @@
                             class="text-gray-500 border-transparent hover:border-emerald-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">子库管理</router-link>
                         <router-link to="/user"
                             class="text-gray-500 border-transparent hover:border-emerald-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">用户管理</router-link>
-                        <router-link to="/order"
-                            class="text-gray-500 border-transparent hover:border-emerald-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">订单管理</router-link>
                         <router-link to="/info"
                             class="text-gray-500 border-transparent hover:border-emerald-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">信息管理</router-link>
 

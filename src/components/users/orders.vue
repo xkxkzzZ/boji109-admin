@@ -10,8 +10,7 @@
       </div>
 
       <!-- Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <!-- Total Orders -->
+      <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div class="flex justify-between">
             <div>
@@ -29,7 +28,6 @@
           </div>
         </div>
 
-        <!-- Total Revenue -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div class="flex justify-between">
             <div>
@@ -47,7 +45,6 @@
           </div>
         </div>
 
-        <!-- Pending Orders -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div class="flex justify-between">
             <div>
@@ -65,7 +62,6 @@
           </div>
         </div>
 
-        <!-- New Customers -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div class="flex justify-between">
             <div>
@@ -82,7 +78,7 @@
             <span class="text-gray-500 ml-1">较上月</span>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Filters and Search -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">

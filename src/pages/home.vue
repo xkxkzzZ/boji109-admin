@@ -6,13 +6,12 @@
       <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Welcome Section -->
         <div class="mb-8">
-          <h1 class="text-2xl font-medium text-gray-800">欢迎回来，{{ userData.name }}</h1>
+          <h1 class="text-2xl font-medium text-gray-800">欢迎回来</h1>
           <p class="text-gray-500 mt-1">今天是 {{ currentDate }}，祝您工作愉快</p>
         </div>
   
         <!-- Account Information and Actions -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Account Information Card -->
+        <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 col-span-1 md:col-span-2">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-medium text-gray-800">账号信息</h2>
@@ -57,9 +56,7 @@
             </div>
           </div>
   
-          <!-- Quick Actions -->
           <div class="space-y-4">
-            <!-- Change Organization -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div class="flex items-center mb-4">
                 <building class="w-5 h-5 text-emerald-600 mr-2" />
@@ -71,7 +68,6 @@
               </button>
             </div>
             
-            <!-- Change Password -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div class="flex items-center mb-4">
                 <lock class="w-5 h-5 text-emerald-600 mr-2" />
@@ -83,7 +79,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </div> -->
       </main>
     </div>
   </template>

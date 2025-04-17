@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div>
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-medium text-gray-800">多级分类管理</h3>
       <button @click="addRootCategory"
@@ -9,14 +9,12 @@
       </button>
     </div>
 
-    <!-- Categories Tree -->
     <div class="border border-gray-200 rounded-lg overflow-hidden">
       <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
         <span class="text-sm font-medium text-gray-700">分类名称</span>
         <span class="text-sm font-medium text-gray-700">操作</span>
       </div>
 
-      <!-- Tree View -->
       <div class="divide-y divide-gray-200">
         <div v-if="categories.length === 0" class="py-8 text-center text-gray-500">
           <folder class="w-12 h-12 mx-auto text-gray-300 mb-2" />
@@ -25,7 +23,6 @@
 
         <template v-for="(category, index) in categories" :key="category.id">
           <div class="category-item">
-            <!-- Root Category -->
             <div class="flex items-center justify-between px-4 py-3 hover:bg-gray-50">
               <div class="flex items-center">
                 <button v-if="category.children && category.children.length > 0" @click="toggleCategory(category)"
@@ -67,7 +64,6 @@
               </div>
             </div>
 
-            <!-- Subcategories (Recursive) -->
             <div v-if="category.expanded && category.children && category.children.length > 0"
               class="pl-8 border-t border-gray-100">
               <div v-for="(subcat, subIndex) in category.children" :key="subcat.id"
@@ -110,7 +106,6 @@
     </div>
 
   </div>
-  <!-- Category Modal -->
   <div v-if="showCategoryModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
       <h3 class="text-lg font-medium text-gray-900 mb-4">
@@ -139,7 +134,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup>

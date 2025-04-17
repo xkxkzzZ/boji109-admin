@@ -20,12 +20,19 @@
               <user class="w-4 h-4 inline-block mr-2" />
               用户管理
             </button>
+            <button @click="activeTab = 'orders'"
+              class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
+              :class="activeTab === 'orders' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'">
+              <shopping-cart class="w-4 h-4 inline-block mr-2" />
+              订单管理
+            </button>
             <button @click="activeTab = 'access-logs'"
               class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
               :class="activeTab === 'access-logs' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'">
               <history class="w-4 h-4 inline-block mr-2" />
               访问记录
             </button>
+            
           </nav>
         </div>
       </div>
@@ -170,7 +177,7 @@
           </div>
 
           <!-- Pagination -->
-          <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+          <!-- <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
             <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <p class="text-sm text-gray-700">
@@ -202,13 +209,17 @@
                 </nav>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
       <!-- Access Logs Tab -->
       <div v-if="activeTab === 'access-logs'">
         <Recordings />
+      </div>
+      <div v-if="activeTab === 'orders'">
+        <Orders />
+
       </div>
     </main>
 
@@ -519,6 +530,7 @@ import {
   Power,
   Eye,
   CirclePlus,
+  ShoppingCart,
 } from 'lucide-vue-next'
 
 import { getUsersWithSubs, assignSubUser, deleteSubUser } from '@/api/admin';
@@ -527,6 +539,7 @@ import { useAuthStore } from '@/store/superuser';
 const authStore = useAuthStore();
 
 import Recordings from '@/components/users/recordings.vue';
+import Orders from '@/components/users/orders.vue';
 
 onMounted(async () => {
   fetchuserswithsubs();
