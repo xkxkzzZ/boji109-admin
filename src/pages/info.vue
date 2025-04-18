@@ -34,8 +34,7 @@
           </div>
   
           <!-- Content Area -->
-          <div class="p-6">
-            <!-- Content List -->
+          <!-- <div class="p-6">
             <div v-if="!editMode" class="space-y-6">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg font-medium text-gray-800">{{ activeTabInfo.title }}</h3>
@@ -143,7 +142,6 @@
               </div>
             </div>
   
-            <!-- Content Editor -->
             <div v-if="editMode" class="space-y-6">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg font-medium text-gray-800">
@@ -166,9 +164,7 @@
                 </div>
               </div>
   
-              <!-- Form -->
               <div class="space-y-4">
-                <!-- Title -->
                 <div>
                   <label for="title" class="block text-sm font-medium text-gray-700 mb-1">标题</label>
                   <input
@@ -180,7 +176,6 @@
                   />
                 </div>
   
-                <!-- Editor Toolbar -->
                 <div class="border border-gray-200 rounded-t-lg bg-gray-50 p-2 flex flex-wrap gap-1">
                   <button
                     v-for="(tool, index) in editorTools"
@@ -193,7 +188,6 @@
                   </button>
                 </div>
   
-                <!-- Content Editor -->
                 <div class="border border-gray-200 rounded-b-lg">
                   <textarea
                     v-model="currentItem.content"
@@ -203,7 +197,6 @@
                   ></textarea>
                 </div>
   
-                <!-- Additional Fields -->
                 <div v-if="activeTab === 'announcements'">
                   <label for="expireDate" class="block text-sm font-medium text-gray-700 mb-1">过期时间</label>
                   <input
@@ -250,7 +243,6 @@
                   </div>
                 </div>
   
-                <!-- SEO Fields -->
                 <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
                   <h4 class="text-sm font-medium text-gray-700 mb-3">SEO设置</h4>
                   <div class="space-y-3">
@@ -278,7 +270,6 @@
                 </div>
               </div>
   
-              <!-- Action Buttons -->
               <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
                 <button
                   @click="cancelEdit"
@@ -300,7 +291,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </main>
   
@@ -430,12 +421,12 @@
   
   // Tabs
   const tabs = [
-    { id: 'agreements', name: '用户协议', icon: FileTerminal, title: '用户协议管理', itemName: '协议' },
-    { id: 'privacy', name: '隐私政策', icon: Shield, title: '隐私政策管理', itemName: '隐私政策' },
-    { id: 'announcements', name: '网站公告', icon: Bell, title: '网站公告管理', itemName: '公告' },
-    { id: 'about', name: '关于我们', icon: Info, title: '关于我们管理', itemName: '介绍' },
-    { id: 'icp', name: '备案信息', icon: FileText, title: '备案信息管理', itemName: '备案信息' },
-    { id: 'contact', name: '联系方式', icon: Phone, title: '联系方式管理', itemName: '联系方式' }
+    { id: 'agreements', name: '用户协议', icon: Shield, title: '用户协议管理', itemName: '协议' },
+    { id: 'announcements', name: '滚动栏公告', icon: Bell, title: '网站公告管理', itemName: '公告' },
+    { id: 'icp', name: '数据库介绍', icon: FileTerminal, title: '备案信息管理', itemName: '备案信息' },
+    { id: 'about', name: '页尾信息', icon: Info, title: '关于我们管理', itemName: '介绍' },
+
+
   ]
   
   const activeTab = ref('agreements')

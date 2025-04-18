@@ -50,12 +50,12 @@
       </div>
 
       <!-- 描述 -->
-      <div class="py-4 border-b border-gray-100">
+      <!-- <div class="py-4 border-b border-gray-100">
         <h4 class="text-base font-medium text-gray-700 mb-2">子库描述</h4>
         <textarea v-model="library.description" rows="3"
           class="block w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-200 focus:border-emerald-500 transition duration-200 text-gray-900"
           placeholder="请输入子库描述..."></textarea>
-      </div>
+      </div> -->
 
       <!-- 保存按钮 -->
       <div class="flex justify-end pt-4">

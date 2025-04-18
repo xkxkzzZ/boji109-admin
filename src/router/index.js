@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
     const token = authStore.token;
 
     if (!token || isTokenExpired(token)) {
-      authStore.logout();
+      authStore.superlogout();
       alert("登录状态已过期，请重新登录");
       // return next({
       //   path: "/login",

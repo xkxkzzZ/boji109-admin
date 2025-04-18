@@ -522,7 +522,7 @@ const deleteEntry = async () => {
 // View details function
 const viewDetails = (id) => {
   console.log('Viewing details for:', id)
-  window.open(`/item/${id}`, '_blank'); // 在新标签页打开
+  window.open(`${import.meta.env.BASE_URL}item/${id}`, '_blank'); // 在新标签页打开
 
 }
 
