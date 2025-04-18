@@ -4,6 +4,12 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+
+      <div class="flex items-center mb-6">
+        <Book class="h-6 w-6 text-emerald-600" />
+        <h2 class="ml-2 text-xl font-medium text-gray-800">内容管理</h2>
+      </div> 
+
       <!-- Tabs -->
       <div class="border-b border-gray-200 mb-6">
         <nav class="-mb-px flex space-x-8">
@@ -33,6 +39,8 @@ import ContentShow from '@/components/item/contentshow.vue';
 import Upload from '@/components/item/upload.vue';
 import household from '@/components/item/household.vue';
 import { ref } from 'vue';
+import { Book } from 'lucide-vue-next';
+
 
 
 

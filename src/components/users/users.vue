@@ -5,10 +5,11 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Page Header -->
-      <div class="mb-6">
-        <h1 class="text-2xl font-medium text-gray-800">用户管理</h1>
-        <p class="text-gray-500 mt-1">管理机构、用户权限和访问记录</p>
-      </div>
+     
+      <div class="flex items-center mb-6">
+        <Users class="h-6 w-6 text-emerald-600" />
+        <h2 class="ml-2 text-xl font-medium text-gray-800">用户管理</h2>
+      </div> 
 
       <!-- Tabs -->
       <div class="mb-6">
@@ -531,6 +532,7 @@ import {
   Eye,
   CirclePlus,
   ShoppingCart,
+  
 } from 'lucide-vue-next'
 
 import { getUsersWithSubs, assignSubUser, deleteSubUser } from '@/api/admin';

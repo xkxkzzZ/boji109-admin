@@ -55,3 +55,40 @@ export const revokeCategory = async (token, userId, categoryName) => {
     return error.response;
   }
 }
+
+// /api/permissions/categories/info
+// query categoryName 
+
+export const getCategoryInfo = async (token, categoryName) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/permissions/categories/info`, {
+      params: { categoryName },
+      headers: {
+        // Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error getting category info:", error);
+    return error.response;
+  }
+}
+
+// post /api/permissions/categories/info
+// json data  
+
+export const updateCategoryInfo = async (token, data) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/permissions/categories/info`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error updating category info:", error);
+    return error.response;
+  }
+}

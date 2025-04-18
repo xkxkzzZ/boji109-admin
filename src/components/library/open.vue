@@ -9,7 +9,7 @@
           <book class="w-6 h-6 text-emerald-600" />
         </div>
         <div class="ml-4">
-          <h3 class="text-lg font-medium text-gray-800">{{ library.name }}</h3>
+          <h3 class="text-lg font-medium text-gray-800">{{ library.categoryName }}</h3>
         </div>
       </div>
 
@@ -19,13 +19,13 @@
           <h4 class="text-base font-medium text-gray-700">对外开放</h4>
         </div>
         <div>
-          <button @click="library.isPublic = !library.isPublic" :class="[
+          <button @click="library.isOpen = !library.isOpen" :class="[
             'relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none',
-            library.isPublic ? 'bg-emerald-600' : 'bg-gray-200'
+            library.isOpen ? 'bg-emerald-600' : 'bg-gray-200'
           ]">
             <span :class="[
               'inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200',
-              library.isPublic ? 'translate-x-6' : 'translate-x-1'
+              library.isOpen ? 'translate-x-6' : 'translate-x-1'
             ]" />
           </button>
         </div>
@@ -38,10 +38,10 @@
         </div>
         <div class="flex items-center max-w-xs">
           <div class="relative flex-grow">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <!-- <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <currency-yen class="h-5 w-5 text-gray-400" />
-            </div>
-            <input v-model="library.packagePrice" type="number" min="0" step="100"
+            </div> -->
+            <input v-model="library.price" type="number" min="0" step="100"
               class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-200 focus:border-emerald-500 transition duration-200 text-gray-900"
               placeholder="输入价格" />
           </div>
@@ -71,41 +71,79 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { Book, LoaderCircle } from 'lucide-vue-next'
+import { getCategoryInfo, updateCategoryInfo } from '@/api/permission'
+import { useAuthStore } from '@/store/superuser'
+const authStore = useAuthStore()
 
 // 三个子库
 const libraries = reactive([
   {
-    id: 'lib-001',
-    name: '散叶',
-    isPublic: true,
-    packagePrice: 1000,
-    description: '包含未归档的散页文献，内容较为零散，适合研究用途。'
+    categoryName: '散叶',
+    isOpen: true,
+    price: 1000,
   },
   {
-    id: 'lib-002',
-    name: '另册',
-    isPublic: false,
-    packagePrice: 800,
-    description: '收录在正册之外的附加资料，如边批、抄本注记等。'
+    categoryName: '另册',
+    isOpen: false,
+    price: 800,
   },
   {
-    id: 'lib-003',
-    name: '归户',
-    isPublic: true,
-    packagePrice: 1200,
-    description: '已分类整理入库的核心文献，具有系统性与研究价值。'
+    categoryName: '归户',
+    isOpen: true,
+    price: 1200,
   }
 ])
+
+async function getinfo(categoryName){
+//   response.data = {
+//     {
+//     "message": "子库信息获取成功",
+//     "data": {
+//         "isOpen": true,
+//         "price": 842.09
+//     }
+// `   }
+// }
+  const res = await getCategoryInfo(authStore.token, categoryName)
+  if (res.status === 200) {
+    console.log(res.data.message)
+    libraries.forEach((library) => {
+      if (library.categoryName === categoryName) {
+        library.isOpen = res.data.data.isOpen
+        library.price = res.data.data.price
+      }
+    })
+  } else {
+    alert(res.data.message);
+  }
+}
+
+
+async function updateinfo(categoryName, isOpen, price){
+  const res = await updateCategoryInfo(authStore.token, {categoryName, isOpen, price})
+  if (res.status === 200) {
+    alert(res.data.message);
+  } else {
+    alert(res.data.message);
+  }
+}
+
 
 // 每个库的保存状态
 const saving = ref([false, false, false])
 
 const saveLibrary = async (index) => {
   saving.value[index] = true
-  await new Promise(resolve => setTimeout(resolve, 1000)) // 模拟异步请求
+  await updateinfo(libraries[index].categoryName, libraries[index].isOpen, libraries[index].price)
   saving.value[index] = false
-  // 可以弹窗提示保存成功
 }
+
+onMounted(() => {
+  libraries.forEach((library) => {
+    getinfo(library.categoryName)
+  })
+})
+
 </script>

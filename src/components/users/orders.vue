@@ -4,10 +4,10 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-      <div class="flex items-center mb-6">
+      <!-- <div class="flex items-center mb-6">
         <shopping-bag class="h-6 w-6 text-emerald-600" />
         <h2 class="ml-2 text-xl font-medium text-gray-800">订单管理</h2>
-      </div>
+      </div> -->
 
       <!-- Stats Cards -->
       <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -81,9 +81,8 @@
       </div> -->
 
       <!-- Filters and Search -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+      <!-- <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Search -->
           <div>
             <label for="search" class="block text-sm font-medium text-gray-700 mb-1">搜索订单</label>
             <div class="relative">
@@ -100,7 +99,6 @@
             </div>
           </div>
 
-          <!-- Date Range -->
           <div>
             <label for="dateRange" class="block text-sm font-medium text-gray-700 mb-1">日期范围</label>
             <div class="relative">
@@ -125,7 +123,6 @@
             </div>
           </div>
 
-          <!-- Status Filter -->
           <div>
             <label for="status" class="block text-sm font-medium text-gray-700 mb-1">订单状态</label>
             <div class="relative">
@@ -152,7 +149,6 @@
           </div>
         </div>
 
-        <!-- Filter Actions -->
         <div class="flex justify-end mt-4 space-x-3">
           <button
             @click="resetFilters"
@@ -169,7 +165,7 @@
             查询订单
           </button>
         </div>
-      </div>
+      </div> -->
 
       <!-- Orders Table -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -181,7 +177,10 @@
                   订单号
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  客户信息
+                  用户ID
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  订单信息
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   订单日期
@@ -190,106 +189,102 @@
                   订单金额
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  支付状态
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   订单状态
                 </th>
-                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <!-- <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   操作
-                </th>
+                </th> -->
               </tr>
             </thead>
+
+<!--             
+// Fetch orders from API
+// {
+//   "id": 1,
+//   "userId": 29,
+//   "amount": 583,
+//   "description": "购买子库权限（分类ID=29）",
+//   "type": "CATEGORY",
+//   "targetId": 29,
+//   "status": "CANCELLED",
+//   "createdAt": "2025-04-17T20:54:32.795158",
+//   "paidAt": null
+// }, -->
+
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="order in orders" :key="order.id" class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {{ order.id }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div class="flex-shrink-0 h-8 w-8 bg-emerald-100 rounded-full flex items-center justify-center">
-                      <user class="h-4 w-4 text-emerald-600" />
-                    </div>
-                    <div class="ml-3">
-                      <div class="text-sm font-medium text-gray-900">{{ order.customer.name }}</div>
-                      <div class="text-sm text-gray-500">{{ order.customer.email }}</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ order.date }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  ¥{{ order.amount.toLocaleString() }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    :class="[
-                      'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
-                      order.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 
-                      order.paymentStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                      'bg-red-100 text-red-800'
-                    ]"
-                  >
-                    {{ paymentStatusText[order.paymentStatus] }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    :class="[
-                      'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
-                      order.status === 'completed' ? 'bg-green-100 text-green-800' : 
-                      order.status === 'processing' ? 'bg-blue-100 text-blue-800' : 
-                      order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                      order.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
-                      order.status === 'refunded' ? 'bg-purple-100 text-purple-800' : 
-                      'bg-gray-100 text-gray-800'
-                    ]"
-                  >
-                    {{ orderStatusText[order.status] }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div class="flex justify-end space-x-2">
-                    <button
-                      @click="viewOrderDetails(order)"
-                      class="text-emerald-600 hover:text-emerald-900 focus:outline-none"
-                      title="查看详情"
-                    >
-                      <eye class="w-4 h-4" />
-                    </button>
-                    <button
-                      v-if="order.status !== 'completed' && order.status !== 'cancelled' && order.status !== 'refunded'"
-                      @click="updateOrderStatus(order)"
-                      class="text-blue-600 hover:text-blue-900 focus:outline-none"
-                      title="更新状态"
-                    >
-                      <edit class="w-4 h-4" />
-                    </button>
-                    <button
-                      @click="printOrder(order)"
-                      class="text-gray-600 hover:text-gray-900 focus:outline-none"
-                      title="打印订单"
-                    >
-                      <printer class="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {{ order.id }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {{ order.userId }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                {{ order.description }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ order.createdAt.split('T')[0] }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ¥{{ order.amount.toLocaleString() }}
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span
+                :class="[
+                  'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                  order.status === 'PAID' ? 'bg-green-100 text-green-800' : 
+                  order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' : 
+                  order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 
+                  order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' : 
+                  order.status === 'REFUNDED' ? 'bg-purple-100 text-purple-800' : 
+                  'bg-gray-100 text-gray-800'
+                ]"
+                >
+                {{ orderStatusText[order.status.toLowerCase()] }}
+                </span>
+              </td>
+              <!-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex justify-end space-x-2">
+                <button
+                  @click="viewOrderDetails(order)"
+                  class="text-emerald-600 hover:text-emerald-900 focus:outline-none"
+                  title="查看详情"
+                >
+                  <eye class="w-4 h-4" />
+                </button>
+                <button
+                  v-if="order.status !== 'COMPLETED' && order.status !== 'CANCELLED' && order.status !== 'REFUNDED'"
+                  @click="updateOrderStatus(order)"
+                  class="text-blue-600 hover:text-blue-900 focus:outline-none"
+                  title="更新状态"
+                >
+                  <edit class="w-4 h-4" />
+                </button>
+                <button
+                  @click="printOrder(order)"
+                  class="text-gray-600 hover:text-gray-900 focus:outline-none"
+                  title="打印订单"
+                >
+                  <printer class="w-4 h-4" />
+                </button>
+                </div>
+              </td> -->
               </tr>
               
               <!-- Empty State -->
               <tr v-if="orders.length === 0">
-                <td colspan="7" class="px-6 py-10 text-center text-gray-500">
-                  <shopping-bag class="w-12 h-12 mx-auto text-gray-300 mb-2" />
-                  <p>暂无订单数据</p>
-                </td>
+              <td colspan="7" class="px-6 py-10 text-center text-gray-500">
+                <shopping-bag class="w-12 h-12 mx-auto text-gray-300 mb-2" />
+                <p>暂无订单数据</p>
+              </td>
               </tr>
             </tbody>
           </table>
         </div>
         
         <!-- Pagination -->
-        <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+        <!-- <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
           <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
             <div>
               <p class="text-sm text-gray-700">
@@ -344,7 +339,7 @@
               </nav>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </main>
 
@@ -618,7 +613,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+
+import { getAllOrders } from '@/api/order'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useAuthStore } from '@/store/superuser'
+const authStore = useAuthStore()
 import { 
   BookOpen, 
   User, 
@@ -685,6 +684,7 @@ const paymentStatusText = {
 }
 
 const orderStatusText = {
+  'paid': '已付款',
   'pending': '待处理',
   'processing': '处理中',
   'completed': '已完成',
@@ -701,144 +701,51 @@ const orderStatusOptions = {
   'refunded': '已退款'
 }
 
-// Orders data
-const orders = ref([
-  {
-    id: 'ORD-2023-1248',
-    customer: {
-      name: '张三',
-      email: 'zhangsan@example.com',
-      phone: '138****1234'
-    },
-    date: '2023-11-15',
-    time: '14:32:45',
-    amount: 1200,
-    paymentStatus: 'paid',
-    paymentMethod: '支付宝',
-    transactionId: 'TXN123456789',
-    status: 'completed',
-    items: [
-      { name: '宋词三百首典藏版', type: '包库访问', price: 1200, quantity: 1 }
-    ],
-    subtotal: 1200,
-    discount: 0,
-    tax: 0,
-    notes: '客户需要电子发票',
-    timeline: [
-      { type: 'created', message: '订单创建', date: '2023-11-15', time: '14:30:22' },
-      { type: 'paid', message: '订单支付完成', date: '2023-11-15', time: '14:32:45' },
-      { type: 'processing', message: '订单处理中', date: '2023-11-15', time: '14:35:10' },
-      { type: 'completed', message: '订单完成', date: '2023-11-15', time: '15:02:33' }
-    ]
-  },
-  {
-    id: 'ORD-2023-1247',
-    customer: {
-      name: '李四',
-      email: 'lisi@example.com',
-      phone: '139****5678'
-    },
-    date: '2023-11-14',
-    time: '09:15:22',
-    amount: 2400,
-    paymentStatus: 'paid',
-    paymentMethod: '微信支付',
-    transactionId: 'TXN987654321',
-    status: 'processing',
-    items: [
-      { name: '唐诗宋词元曲全集', type: '包库访问', price: 2400, quantity: 1 }
-    ],
-    subtotal: 2400,
-    discount: 0,
-    tax: 0,
-    notes: '',
-    timeline: [
-      { type: 'created', message: '订单创建', date: '2023-11-14', time: '09:12:18' },
-      { type: 'paid', message: '订单支付完成', date: '2023-11-14', time: '09:15:22' },
-      { type: 'processing', message: '订单处理中', date: '2023-11-14', time: '09:20:45' }
-    ]
-  },
-  {
-    id: 'ORD-2023-1246',
-    customer: {
-      name: '王五',
-      email: 'wangwu@example.com',
-      phone: '135****9012'
-    },
-    date: '2023-11-13',
-    time: '16:45:33',
-    amount: 3600,
-    paymentStatus: 'pending',
-    paymentMethod: '银行转账',
-    transactionId: '',
-    status: 'pending',
-    items: [
-      { name: '四库全书精选', type: '包库访问', price: 3600, quantity: 1 }
-    ],
-    subtotal: 3600,
-    discount: 0,
-    tax: 0,
-    notes: '需要纸质合同',
-    timeline: [
-      { type: 'created', message: '订单创建', date: '2023-11-13', time: '16:45:33' }
-    ]
-  },
-  {
-    id: 'ORD-2023-1245',
-    customer: {
-      name: '赵六',
-      email: 'zhaoliu@example.com',
-      phone: '136****3456'
-    },
-    date: '2023-11-12',
-    time: '11:22:10',
-    amount: 950,
-    paymentStatus: 'refunded',
-    paymentMethod: '支付宝',
-    transactionId: 'TXN567891234',
-    status: 'refunded',
-    items: [
-      { name: '明清小说集', type: '包库访问', price: 950, quantity: 1 }
-    ],
-    subtotal: 950,
-    discount: 0,
-    tax: 0,
-    notes: '客户申请退款',
-    timeline: [
-      { type: 'created', message: '订单创建', date: '2023-11-12', time: '11:20:05' },
-      { type: 'paid', message: '订单支付完成', date: '2023-11-12', time: '11:22:10' },
-      { type: 'processing', message: '订单处理中', date: '2023-11-12', time: '11:25:30' },
-      { type: 'refunded', message: '订单已退款', date: '2023-11-13', time: '09:15:22' }
-    ]
-  },
-  {
-    id: 'ORD-2023-1244',
-    customer: {
-      name: '孙七',
-      email: 'sunqi@example.com',
-      phone: '137****7890'
-    },
-    date: '2023-11-10',
-    time: '15:10:45',
-    amount: 1800,
-    paymentStatus: 'paid',
-    paymentMethod: '微信支付',
-    transactionId: 'TXN345678912',
-    status: 'cancelled',
-    items: [
-      { name: '古代文学研究资料', type: '包库访问', price: 1800, quantity: 1 }
-    ],
-    subtotal: 1800,
-    discount: 0,
-    tax: 0,
-    notes: '客户取消订单',
-    timeline: [
-      { type: 'created', message: '订单创建', date: '2023-11-10', time: '15:08:22' },
-      { type: 'paid', message: '订单支付完成', date: '2023-11-10', time: '15:10:45' },
-      { type: 'cancelled', message: '订单已取消', date: '2023-11-11', time: '10:25:18' }
-    ]
+// // Orders data
+// const orders = ref([
+//   {
+//     id: 'ORD-2023-1248',
+//     customer: {
+//       name: '张三',
+//       email: 'zhangsan@example.com',
+//       phone: '138****1234'
+//     },
+//     date: '2023-11-15',
+//     time: '14:32:45',
+//     amount: 1200,
+//     paymentStatus: 'paid',
+//     paymentMethod: '支付宝',
+//     transactionId: 'TXN123456789',
+//     status: 'completed',
+//     items: [
+//       { name: '宋词三百首典藏版', type: '包库访问', price: 1200, quantity: 1 }
+//     ],
+//     subtotal: 1200,
+//     discount: 0,
+//     tax: 0,
+//     notes: '客户需要电子发票',
+//     timeline: [
+//       { type: 'created', message: '订单创建', date: '2023-11-15', time: '14:30:22' },
+//       { type: 'paid', message: '订单支付完成', date: '2023-11-15', time: '14:32:45' },
+//       { type: 'processing', message: '订单处理中', date: '2023-11-15', time: '14:35:10' },
+//       { type: 'completed', message: '订单完成', date: '2023-11-15', time: '15:02:33' }
+//     ]
+//   },
+// ])
+
+const orders = ref([])
+const fetchOrders = async () => {
+  try {
+    const response = await getAllOrders(authStore.token)
+    orders.value = response.data.data
+  } catch (error) {
+    console.error('Error fetching orders:', error)
   }
-])
+}
+
+onMounted( async ()  => {
+  await fetchOrders()
+})
 
 // Pagination
 const pagination = reactive({

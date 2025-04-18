@@ -29,7 +29,7 @@
               </div>
               <input id="search" v-model="searchQuery" type="text" @keyup.enter="fetchData"
                 class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
-                placeholder="搜索编号、名称、关键词、年份、形态、描述（支持回车搜索）" />
+                placeholder="搜索条目.." />
             </div>
           </div>
 
@@ -55,10 +55,11 @@
         </div>
 
         <div class="flex justify-between mt-4  border-gray-100">
-          <button @click="fetchData"
+          <!-- <button @click="fetchData"
             class="flex items-center py-1.5 px-3 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
             <span>搜索</span>
-          </button>
+          </button> -->
+          <div></div>
           <button @click="resetFilters" class="text-gray-500 hover:text-gray-700 text-sm flex items-center">
             <refresh-cw class="w-4 h-4 mr-1" />
             重置筛选
@@ -85,7 +86,7 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="book in filteredBooks" :key="book.id" class="hover:bg-gray-50">
+              <tr v-for="book in filteredItems" :key="book.id" class="hover:bg-gray-50">
                 <td class="px-4 py-2.5 text-gray-900">{{ book.customId }}</td>
                 <td class="px-4 py-2.5">
                   <img :src="book.coverPath ? `${FILE_BASE_URL}/${book.coverPath}` : defaultCover" alt="封面图"
@@ -120,117 +121,44 @@
           </table>
         </div>
 
-        <!-- Pagination -->
+        <!-- 分页 -->
         <div class="bg-white px-4 py-2.5 flex items-center justify-between border-t border-gray-200 text-sm">
-          <p class="text-gray-700">
-            共 <span class="font-medium">{{ books.length }}</span> 条
-          </p>
+          <div class="text-sm text-gray-500">
+            显示第 {{ paginationStart }} - {{ paginationEnd }} 条，共 {{ totalItemsCount }} 条
+          </div>
+          <nav class="flex items-center space-x-2">
+            <button @click="currentPage = Math.max(1, currentPage - 1)" :disabled="currentPage === 1" :class="[
+              'px-3 py-1 rounded-md border',
+              currentPage === 1
+                ? 'text-gray-400 cursor-not-allowed border-gray-200'
+                : 'text-gray-700 hover:bg-gray-100 border-gray-300'
+            ]">
+              上一页
+            </button>
+            <button v-for="page in displayedPages" :key="page" @click="currentPage = page" :class="[
+              'px-3 py-1 rounded-md border',
+              currentPage === page
+                ? 'bg-green-50 text-green-600 font-medium border-green-300'
+                : 'text-gray-700 hover:bg-gray-100 border-gray-300'
+            ]">
+              {{ page }}
+            </button>
+            <button @click="currentPage = Math.min(totalPages, currentPage + 1)" :disabled="currentPage === totalPages"
+              :class="[
+                'px-3 py-1 rounded-md border',
+                currentPage === totalPages
+                  ? 'text-gray-400 cursor-not-allowed border-gray-200'
+                  : 'text-gray-700 hover:bg-gray-100 border-gray-300'
+              ]">
+              下一页
+            </button>
+          </nav>
         </div>
       </div>
 
 
     </main>
 
-    <!-- Entry Modal -->
-    <!-- <div v-if="showEntryModal" class="fixed inset-0 overflow-y-auto z-50">
-      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                  编辑条目
-                  <span class="text-sm text-gray-500">（编号和文件不可修改）</span>
-                </h3>
-                <div class="mt-4 space-y-4">
-                  <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700">名称</label>
-                    <input type="text" id="title" v-model="editingBook.title"
-                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                  </div>
-                  <div class="grid grid-cols-2 gap-4">
-                    <div>
-                      <label for="category1" class="block text-sm font-medium text-gray-700">一级分类</label>
-                      <select id="category1" v-model="editingBook.category1"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm">
-                        <option v-for="cat in categories" :key="cat.id" :value="cat.name">{{ cat.name }}</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label for="category2" class="block text-sm font-medium text-gray-700">二级分类</label>
-                      <select id="category2" v-model="editingBook.category2"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                        :disabled="!editingBook.category1">
-                        <option v-for="subcat in getsubcategories(editingBook.category1)" :key="subcat.id"
-                          :value="subcat.name">{{ subcat.name }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2 gap-4">
-                    <div>
-                      <label for="category3" class="block text-sm font-medium text-gray-700">三级分类</label>
-                      <input type="text" id="category3" v-model="editingBook.category3"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                    </div>
-                    <div>
-                      <label for="keywords" class="block text-sm font-medium text-gray-700">关键词</label>
-                      <input type="text" id="keywords" v-model="editingBook.keywords"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                    </div>
-                  </div>
-
-
-                  <div class="grid grid-cols-2 gap-4">
-                    <div>
-                      <label for="year" class="block text-sm font-medium text-gray-700">年份</label>
-                      <input type="text" id="year" v-model="editingBook.year"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                    </div>
-                    <div>
-                      <label for="price" class="block text-sm font-medium text-gray-700">价格</label>
-                      <input type="text" id="price" v-model="editingBook.price"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label for="shape" class="block text-sm font-medium text-gray-700">形态</label>
-                    <input type="text" id="shape" v-model="editingBook.shape"
-                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm" />
-                  </div>
-
-                  <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">描述</label>
-                    <textarea id="description" v-model="editingBook.description" rows="4"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                      placeholder="请输入古籍描述"></textarea>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button type="button" @click="saveEntry"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:ml-3 sm:w-auto sm:text-sm">
-              保存
-            </button>
-            <button type="button" @click="showEntryModal = false"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-              取消
-            </button>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
     <EntryModal :visible="showEntryModal" :editingBook="editingBook" :categories="categories"
       :getsubcategories="getsubcategories" @update:visible="showEntryModal = $event" @save="saveEntry" />
@@ -282,7 +210,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { Search, RefreshCw, Edit, Eye, Trash2, Plus, AlertTriangle } from 'lucide-vue-next'
 import { getItemByIds, updateItem, getFilteredList, getQueryList, deleteItem } from '@/api/item'
 import { getAllHouseholds } from '@/api/household'
@@ -317,7 +245,7 @@ const editingBook = ref({
   title: '',
   category1: '',
   category2: '',
-  category3: '',
+  householdId: null,
   keywords: '',
   year: '',
   price: '',
@@ -387,6 +315,55 @@ function getHouseholdNameById(id) {
   return match ? match.name : '' // 没找到就显示个占位符
 }
 
+// 分页
+const currentPage = ref(1)
+const itemsPerPage = 10
+
+// 后端分页数据
+const fetchedItemIds = ref([]) // 全部满足条件的 ID 列表
+const remoteItemsMap = ref({}) // id -> 条目详情
+const filteredItems = ref([])  // 当前页展示的条目
+
+
+// 当前页 ID 列表
+const paginatedIds = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  return fetchedItemIds.value.slice(start, start + itemsPerPage)
+})
+
+// 总条目数
+const totalItemsCount = computed(() => fetchedItemIds.value.length)
+const totalPages = computed(() => Math.max(1, Math.ceil(totalItemsCount.value / itemsPerPage)))
+
+// 分页展示页码列表
+const displayedPages = computed(() => {
+  const pages = []
+  const maxPagesToShow = 5
+  if (totalPages.value <= maxPagesToShow) {
+    for (let i = 1; i <= totalPages.value; i++) {
+      pages.push(i)
+    }
+  } else {
+    let startPage = Math.max(1, currentPage.value - Math.floor(maxPagesToShow / 2))
+    let endPage = Math.min(totalPages.value, startPage + maxPagesToShow - 1)
+    if (endPage === totalPages.value) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1)
+    }
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i)
+    }
+  }
+  return pages
+})
+
+// 分页范围（xx-yy）
+const paginationStart = computed(() => {
+  return fetchedItemIds.value.length === 0 ? 0 : (currentPage.value - 1) * itemsPerPage + 1
+})
+const paginationEnd = computed(() => {
+  return Math.min(currentPage.value * itemsPerPage, totalItemsCount.value)
+})
+
 
 // Fetch books from API
 const fetchBooks = async (ids) => {
@@ -415,37 +392,51 @@ const queriedlist = async (keyword) => {
   try {
     const response = await getQueryList({ query: keyword })
     console.log(response.data)
-    return response.data
+    return response.data.data
   } catch (error) {
     console.error('Error fetching books:', error)
   }
 }
+// 根据当前页的 ID 拉取条目详情
+const fetchPageItems = async () => {
+  if (paginatedIds.value.length === 0) {
+    filteredItems.value = []
+    return
+  }
 
+  const allItems = await fetchBooks(paginatedIds.value)
+  filteredItems.value = allItems
+}
+
+// 拉取当前页条目详情
+watch(paginatedIds, fetchPageItems)
 
 
 const fetchData = async () => {
   try {
-    const filterlist = await filtedlist(filters.value.cat1, filters.value.cat2);
-    console.log("filterlist", filterlist);
-
-    let finallist = filterlist
+    const filterIds = await filtedlist(filters.value.cat1, filters.value.cat2);
+    console.log("filterIds", filterIds);
 
     if (searchQuery.value) {
-      const querylist = await queriedlist(searchQuery.value);
-      console.log("querylist", querylist);
-      finallist = filterlist.filter(x => querylist.includes(x));
+      const queryIds = await queriedlist(searchQuery.value);
+      console.log("queryIds", queryIds);
+      fetchedItemIds.value = filterIds.filter(id => queryIds.includes(id))
     }
-
-    finallist.reverse()
-    console.log("finallist", finallist);
-    books.value = await fetchBooks(finallist);
-
-
+    else {
+      fetchedItemIds.value = filterIds
+    }
+    fetchedItemIds.value.reverse()
+    console.log("fetchedItemIds", fetchedItemIds.value);
 
   } catch (error) {
     console.error("获取数据出错:", error);
   }
 };
+
+// 拉取所有符合条件的 ID（分类和搜索）
+watch([filters.value, searchQuery.value], async () => {
+  fetchData()
+}, { immediate: true })
 
 // Computed filtered books based on search and filters
 const filteredBooks = computed(() => {
@@ -479,10 +470,11 @@ const saveEntry = async () => {
   if (response.status === 200) {
     console.log('Book saved successfully:', response)
     showEntryModal.value = false
+    await fetchPageItems()
   } else {
+    alert(response.data.message)
     console.error('Error saving book:', response)
   }
-  fetchData()
 }
 
 const formatBook = (book) => {
