@@ -405,7 +405,7 @@ const fetchPageItems = async () => {
   }
 
   const allItems = await fetchBooks(paginatedIds.value)
-  filteredItems.value = allItems
+  filteredItems.value = allItems.reverse()
 }
 
 // 拉取当前页条目详情
